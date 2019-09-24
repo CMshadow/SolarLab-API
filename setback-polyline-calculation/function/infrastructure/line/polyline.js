@@ -34,7 +34,7 @@ class Polyline {
     return new Polyline (newPoints, id, newName, newColor, newWidth, newShow);
     }
 
-  get length () {
+  length () {
     return this.points.length;
   }
 
@@ -61,7 +61,7 @@ class Polyline {
 
   getSegmentBearing () {
     let brngArray = [];
-    for (let i = 0; i < this.length-1; i++) {
+    for (let i = 0; i < this.length()-1; i++) {
       brngArray.push(Point.bearing(this.points[i], this.points[i+1]));
     }
     return brngArray;
@@ -69,7 +69,7 @@ class Polyline {
 
   getSegmentDistance () {
     let distArray = [];
-    for (let i = 0; i < this.length-1; i++) {
+    for (let i = 0; i < this.length()-1; i++) {
       distArray.push(Point.surfaceDistance(this.points[i], this.points[i+1]));
     }
     return distArray;
@@ -77,7 +77,7 @@ class Polyline {
 
   getSegmentPolyline () {
     let polylineArray = [];
-    for (let i = 0; i < this.length-1; i++) {
+    for (let i = 0; i < this.length()-1; i++) {
       polylineArray.push(new Polyline([this.points[i], this.points[i+1]]));
     }
     return polylineArray;
@@ -85,7 +85,7 @@ class Polyline {
 
   getHelpLineBearings () {
     let brngSet = new Set();
-    for (let i = 0; i < this.length-1; i++) {
+    for (let i = 0; i < this.length()-1; i++) {
       const brng = Point.bearing(this.points[i], this.points[i+1]);
       const brng1 = (brng-180)%360 > 0 ? (brng-180)%360 : (brng-180)%360+360;
       const brng2 = (brng+90)%360 > 0 ? (brng+90)%360 : (brng+90)%360+360;

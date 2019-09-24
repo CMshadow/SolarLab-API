@@ -20,7 +20,7 @@ class FoundLine extends Polyline {
     polyline, id = polyline.entityId, name = null, color = null, width = null,
     show = true
   ) {
-    const priorPoints = polyline.points.slice(0, polyline.length-1)
+    const priorPoints = polyline.points.slice(0, polyline.points.length-1)
     .map(elem => {
       return Point.fromPoint(elem);
     });
@@ -55,8 +55,8 @@ class FoundLine extends Polyline {
   }
 
   makeSetbackPolyline (stbDist, type) {
-    const mathLineCollection = MathLineCollection.fromPolyline(this);
-
+    const originPolyline = FoundLine.fromPolyline(this);
+    const mathLineCollection = MathLineCollection.fromPolyline(originPolyline);
     const result = [];
     for(let direction of [90, -90]) {
       const stbMathLineCollection = new MathLineCollection();
@@ -66,10 +66,9 @@ class FoundLine extends Polyline {
         );
         stbMathLineCollection.addMathLine(new MathLine(anchor, mathLine.brng));
       };
-      for (let index in stbMathLineCollection.mathLineCollection) {
-        const mathLine = stbMathLineCollection.mathLineCollection[index];
+      stbMathLineCollection.mathLineCollection.forEach((mathLine, index) =>{
         let nextMathLine = null;
-        if (index < stbMathLineCollection.length - 1) {
+        if (index < stbMathLineCollection.length() - 1) {
           nextMathLine = stbMathLineCollection.mathLineCollection[index + 1];
         } else {
           nextMathLine = stbMathLineCollection.mathLineCollection[0];
@@ -127,9 +126,8 @@ class FoundLine extends Polyline {
           mathLine.originCor, intersection
         );
         nextMathLine.originCor = intersection
-      };
-      const stbPolylinePoints =
-        MathLineCollection.toPolylinePoints(stbMathLineCollection);
+      });
+      const stbPolylinePoints = stbMathLineCollection.toPolylinePoints();
       const stbPolyline = new FoundLine(stbPolylinePoints);
       result.push({
         'polyline': stbPolyline,

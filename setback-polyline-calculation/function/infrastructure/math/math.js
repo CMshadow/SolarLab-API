@@ -1,7 +1,5 @@
 const Cesium = require('cesium');
 
-const Coordinate = require('../point/coordinate.js');
-
 const coordinateToVector = (coordinate) => {
   var latRadians = Cesium.Math.toRadians(coordinate.lat);
   var lonRadians = Cesium.Math.toRadians(coordinate.lon);
@@ -17,11 +15,11 @@ const vectorToCoordinate = (v, height) => {
     var latRadians = Math.atan2(v[2], Math.sqrt(v[0]*v[0] + v[1]*v[1]));
     var lonRadians = Math.atan2(v[1], v[0]);
 
-    return new Coordinate(
+    return [
       Cesium.Math.toDegrees(lonRadians),
       Cesium.Math.toDegrees(latRadians),
       height
-    );
+    ];
 };
 
 const greatCircle = (coordinate, bearing) => {

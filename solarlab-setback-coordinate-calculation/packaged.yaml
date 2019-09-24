@@ -1,9 +1,0 @@
-Transform: AWS::Serverless-2016-10-31
-Resources:
-  SetbackCoordinateFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Runtime: nodejs10.x
-      CodeUri: s3://solarlab-sam-lambda/5b062f6363218868f3ad8d9327079e03
-      Handler: index.lambdaHandler
-      Timeout: 15

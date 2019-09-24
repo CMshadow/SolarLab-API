@@ -133,7 +133,9 @@ class Coordinate {
     }
 
     if (intersection){
-      return MyMath.vectorToCoordinate(intersection, avgHeight);
+      return new Coordinate(
+        ...MyMath.vectorToCoordinate(intersection, avgHeight)
+      );
     }
     return undefined;
   }

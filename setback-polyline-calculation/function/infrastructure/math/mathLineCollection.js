@@ -6,7 +6,7 @@ class MathLineCollection {
     this.mathLineCollection = mathLines ? mathLines : [];
   }
 
-  get length () {
+  length () {
     return this.mathLineCollection.length;
   }
 
@@ -30,9 +30,9 @@ class MathLineCollection {
     return new MathLineCollection(mathLines);
   }
 
-  static toPolylinePoints (mathLineCollection) {
+  toPolylinePoints () {
     const points = [];
-    for (let elem of mathLineCollection.mathLineCollection) {
+    for (let elem of this.mathLineCollection) {
       points.push(Point.fromCoordinate(elem.originCor));
     }
     return [...points, points[0]];

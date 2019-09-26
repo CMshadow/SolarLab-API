@@ -1,5 +1,5 @@
 {
-  "originPolyline": {
+  "originPolylines": [{
     "points": [
       {
         "lon": -117.841146229003,
@@ -97,7 +97,7 @@
     },
     "show": true,
     "width": 4
-  },
-  "stbDist": 1,
-  "direction": "outside"
+  }],
+  "stbDists": [1],
+  "direction": "inside"
 }

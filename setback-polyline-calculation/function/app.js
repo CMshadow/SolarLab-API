@@ -2,20 +2,28 @@ const FoundLine = require('./infrastructure/line/foundLine');
 
 exports.lambdaHandler = async (event, context) => {
   console.log(event)
-  const originPolyline = FoundLine.fromPolyline(event.originPolyline);
-  const stbDist = event.stbDist;
+  const originPolylines = event.originPolylines.map(elem =>
+    (FoundLine.fromPolyline(elem))
+  );
+  const stbDists = event.stbDists;
   const direction = event.direction;
 
   let stbPolylines = [];
-  if (stbDist === 0) {
-    stbPolylines = [originPolyline];
-  } else {
-    if (direction === 'inside') {
-      stbPolylines = originPolyline.makeSetbackPolylineInside(stbDist);
+  originPolylines.forEach((originPolyline, index) => {
+    if (stbDists[index] === 0) {
+      stbPolylines.push([originPolyline]);
     } else {
-      stbPolylines = originPolyline.makeSetbackPolylineOutside(stbDist);
+      if (direction === 'inside') {
+        stbPolylines.push(
+          originPolyline.makeSetbackPolylineInside(stbDists[index])
+        );
+      } else {
+        stbPolylines.push(
+          originPolyline.makeSetbackPolylineOutside(stbDists[index])
+        );
+      }
     }
-  }
+  });
   console.log(stbPolylines)
 
   let response;

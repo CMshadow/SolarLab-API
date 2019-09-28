@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  PassagePolylineFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://solarlab-sam-lambda/4e74daf22f0c607606de5ff615601d89
+      Handler: app.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15

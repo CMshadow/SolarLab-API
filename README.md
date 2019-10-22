@@ -1,8 +1,20 @@
 # SolarLab-API
 SolarLab APIs on AWS Lambda
 
-# Package SAM template
-$ sam package --template-file <your yaml>.yaml --s3-bucket s3://solarlab-sam-lambda --output-template-file <your ouput>.yaml
+## Package SAM template
 
-# Deploy packaged SAM template
-$ sam deploy --template-file ./<your output>.yaml --stack-name <your stack name> --capabilities CAPABILITY_IAM
+- <yourYaml>.yaml : Lambda function package settings
+- <outputYaml>.yaml : deploy settings
+  
+```shell
+$ sam package --template-file <yourYaml>.yaml --s3-bucket s3://solarlab-sam-lambda --output-template-file <outputYaml>.yaml
+```
+
+## Deploy packaged SAM template
+
+- <outputYaml>.yaml : deploy settings
+- <yourStackName> : the name of the lambda function after deployment
+  
+```shell
+$ sam deploy --template-file ./<outputYaml>.yaml --stack-name <yourStackName> --capabilities CAPABILITY_IAM
+```

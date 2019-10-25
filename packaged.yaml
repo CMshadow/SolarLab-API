@@ -4,7 +4,14 @@ Resources:
   SetbackPolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/b0a5d89bc8ddf492f5b15518b71b8ae8
+      CodeUri: s3://solarlab-sam-lambda/c6bc4c2acb842c08c6209f2ed5eb37ef
       Handler: setbackPolylineCalculationAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15
+  PassagePolylineFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://solarlab-sam-lambda/c6bc4c2acb842c08c6209f2ed5eb37ef
+      Handler: passageSetbackCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15

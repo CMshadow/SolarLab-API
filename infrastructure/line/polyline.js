@@ -3,7 +3,10 @@ const uuid = require('uuid/v1');
 const turf = require('@turf/turf');
 const simplepolygon = require('simplepolygon');
 
+const Coordinate = require('../point/coordinate');
 const Point = require('../point/point.js');
+const MathLineCollection = require('../math/mathLineCollection.js');
+const MathLine = require('../math/mathLine.js');
 
 class Polyline {
   constructor (
@@ -100,6 +103,124 @@ class Polyline {
     const geoJson = this.makeGeoJSON();
     const selfIntersectionDetect = simplepolygon(geoJson);
     return selfIntersectionDetect.features.length >= 2;
+  }
+
+  makeSetbackPolylineOutside (stbDist) {
+    const originPolyline = this.makeSetbackPolyline(stbDist);
+    if (originPolyline.polyline.isSelfIntersection()) {
+      return originPolyline.polyline.removeOutsideSetbackSelfIntersection();
+    } else {
+      return [originPolyline.polyline];
+    }
+  }
+
+  makeSetbackPolyline (stbDist) {
+    const originPolyline = Polyline.fromPolyline(this);
+    const mathLineCollection = MathLineCollection.fromPolyline(originPolyline);
+
+    let stbPolylinePoints = [];
+    for (const direction of [90, -90]) {
+      const stbMathLineCollection = new MathLineCollection();
+      mathLineCollection.mathLineCollection.forEach(mathLine => {
+        const anchor = Coordinate.destination(
+          mathLine.originCor, mathLine.brng + direction, stbDist
+        );
+        const end = Coordinate.destination(
+          mathLine.dest, mathLine.brng + direction, stbDist
+        );
+        stbMathLineCollection.addMathLine(
+          new MathLine(anchor, mathLine.brng, null, end)
+        );
+      });
+
+      stbMathLineCollection.mathLineCollection.slice(0, -1).forEach(
+        (mathLine, index) => {
+          let nextMathLine = null;
+          nextMathLine = stbMathLineCollection.mathLineCollection[index + 1];
+          const intersectCandidate1 = Coordinate.intersection(
+            mathLine.originCor,
+            mathLine.brng,
+            nextMathLine.originCor,
+            nextMathLine.brng - 180
+          );
+          const intersectCandidate2 = Coordinate.intersection(
+            mathLine.originCor,
+            mathLine.brng,
+            nextMathLine.originCor,
+            nextMathLine.brng
+          );
+          const intersectCandidate3 = Coordinate.intersection(
+            mathLine.originCor,
+            mathLine.brng - 180,
+            nextMathLine.originCor,
+            nextMathLine.brng - 180
+          );
+          const intersectCandidate4 = Coordinate.intersection(
+            mathLine.originCor,
+            mathLine.brng - 180,
+            nextMathLine.originCor,
+            nextMathLine.brng
+          );
+          const intersectCandidateCompare = [
+            {
+              candidate: intersectCandidate1,
+              dist:
+                Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate1)
+            },
+            {
+              candidate: intersectCandidate2,
+              dist:
+                Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate2)
+            },
+            {
+              candidate: intersectCandidate3,
+              dist:
+                Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate3)
+            },
+            {
+              candidate: intersectCandidate4,
+              dist:
+                Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate4)
+            }
+          ];
+          intersectCandidateCompare.sort((a, b) => (a.dist < b.dist) ? -1 : 1);
+          const intersection = intersectCandidateCompare[0].candidate;
+
+          mathLine.dist = Coordinate.surfaceDistance(
+            mathLine.originCor, intersection
+          );
+          nextMathLine.originCor = intersection;
+        }
+      );
+      if (direction === 90) {
+        stbPolylinePoints = stbPolylinePoints.concat(
+          stbMathLineCollection.toPolylinePoints(false)
+        );
+      } else {
+        stbPolylinePoints = stbPolylinePoints.concat(
+          stbMathLineCollection.toPolylinePoints(false).reverse()
+        );
+      }
+    }
+    const stbPolyline = new Polyline(stbPolylinePoints);
+    return {
+      polyline: stbPolyline,
+      direction: 90
+    };
+  }
+
+  removeOutsideSetbackSelfIntersection (direction) {
+    const splitGeoJSON = simplepolygon(this.makeGeoJSON());
+    const splitPolylines = [];
+    splitGeoJSON.features.forEach(elem => {
+      if (elem.properties.parent < 0) {
+        const points = elem.geometry.coordinates[0].slice(0, -1).map(cor =>
+          new Point(cor[0], cor[1], cor[2] ? cor[2] : this.points[0].height)
+        );
+        splitPolylines.push(new Polyline([...points, points[0]]));
+      }
+    });
+    return splitPolylines;
   }
 }
 

@@ -1,14 +1,14 @@
 const FoundLine = require('./infrastructure/line/foundLine');
 
 exports.lambdaHandler = async (event, context) => {
-  console.log(event)
+  console.log(event);
   const originPolylines = event.originPolylines.map(elem =>
     (FoundLine.fromPolyline(elem))
   );
   const stbDists = event.stbDists;
   const direction = event.direction;
 
-  let stbPolylines = [];
+  const stbPolylines = [];
   originPolylines.forEach((originPolyline, index) => {
     if (stbDists[index] === 0) {
       stbPolylines.push([originPolyline]);
@@ -24,20 +24,20 @@ exports.lambdaHandler = async (event, context) => {
       }
     }
   });
-  console.log(stbPolylines)
+  console.log(stbPolylines);
 
   let response;
   try {
     response = {
-      'statusCode': 200,
-      'body': JSON.stringify({
-        stbPolylines: stbPolylines,
+      statusCode: 200,
+      body: JSON.stringify({
+        stbPolylines: stbPolylines
       })
-    }
+    };
   } catch (err) {
     console.log(err);
     return err;
   }
 
-  return response
+  return response;
 };

@@ -2,8 +2,8 @@ const MathLine = require('./mathLine.js');
 const Point = require('../point/point.js');
 
 class MathLineCollection {
-  constructor(mathLines=null) {
-    this.mathLineCollection = mathLines ? mathLines : [];
+  constructor (mathLines = null) {
+    this.mathLineCollection = mathLines || [];
   }
 
   length () {
@@ -19,22 +19,21 @@ class MathLineCollection {
     const segmentPolyline = polyline.getSegmentPolyline();
     const segmentBrng = polyline.getSegmentBearing();
     const segmentDistance = polyline.getSegmentDistance();
-    for (let index in segmentPolyline) {
-      const segment = segmentPolyline[index];
+    segmentPolyline.forEach((ply, index) => {
       mathLines.push(
         new MathLine(
-          segment.points[0], segmentBrng[index], segmentDistance[index]
+          ply.points[0], segmentBrng[index], segmentDistance[index]
         )
       );
-    }
+    });
     return new MathLineCollection(mathLines);
   }
 
   toPolylinePoints () {
     const points = [];
-    for (let elem of this.mathLineCollection) {
+    this.mathLineCollection.forEach(elem => {
       points.push(Point.fromCoordinate(elem.originCor));
-    }
+    });
     return [...points, points[0]];
   }
 }

@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  SetbackPolylineFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./
+      Handler: setbackPolylineCalculationAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15
+  PassagePolylineFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./
+      Handler: passageSetbackCalculationAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15
+  FlatRoofPVCalculationFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./
+      Handler: flatRoofPVCalculationAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15

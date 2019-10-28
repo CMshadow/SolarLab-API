@@ -1,0 +1,98 @@
+{
+  "data": [
+    [
+      {
+        "points": [
+          {
+            "lon": -117.841170064375,
+            "lat": 33.647215460514,
+            "height": 5,
+            "heightOffset": 0,
+            "entityId": "fafc0534-f885-11e9-8bba-8f1a4163095f",
+            "name": "vertex",
+            "color": {
+              "red": 1,
+              "green": 1,
+              "blue": 1,
+              "alpha": 1
+            },
+            "pixelSize": 15,
+            "show": true,
+            "render": true
+          },
+          {
+            "lon": -117.841445486993,
+            "lat": 33.646990594509,
+            "height": 5,
+            "heightOffset": 0,
+            "entityId": "fafc0535-f885-11e9-8bba-8f1a4163095f",
+            "name": "vertex",
+            "color": {
+              "red": 1,
+              "green": 1,
+              "blue": 1,
+              "alpha": 1
+            },
+            "pixelSize": 15,
+            "show": true,
+            "render": true
+          },
+          {
+            "lon": -117.841010495761,
+            "lat": 33.646879075135,
+            "height": 5,
+            "heightOffset": 0,
+            "entityId": "fafc0536-f885-11e9-8bba-8f1a4163095f",
+            "name": "vertex",
+            "color": {
+              "red": 1,
+              "green": 1,
+              "blue": 1,
+              "alpha": 1
+            },
+            "pixelSize": 15,
+            "show": true,
+            "render": true
+          },
+          {
+            "lon": -117.841170064375,
+            "lat": 33.647215460514,
+            "height": 5,
+            "heightOffset": 0,
+            "entityId": "fafc0534-f885-11e9-8bba-8f1a4163095f",
+            "name": "vertex",
+            "color": {
+              "red": 1,
+              "green": 1,
+              "blue": 1,
+              "alpha": 1
+            },
+            "pixelSize": 15,
+            "show": true,
+            "render": true
+          }
+        ],
+        "entityId": "fafc0537-f885-11e9-8bba-8f1a4163095f",
+        "name": "polyline",
+        "color": {
+          "red": 1,
+          "green": 1,
+          "blue": 1,
+          "alpha": 1
+        },
+        "show": true,
+        "width": 4
+      },
+      []
+    ]
+  ],
+  "azimuth": 88,
+  "tilt": 0,
+  "panelWidth": 1,
+  "panelLength": 2,
+  "rowSpace": 0.5,
+  "colSpace": 0,
+  "align": "center",
+  "height": 5,
+  "initArraySequenceNum": 0
+}

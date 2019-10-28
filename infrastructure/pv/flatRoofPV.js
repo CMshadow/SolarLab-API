@@ -4,8 +4,6 @@ const MyMath = require('../math/polygonMath.js');
 const Coordinate = require('../point/coordinate');
 const Point = require('../point/point');
 const Polyline = require('../line/polyline');
-const Polygon = require('../polygon/Polygon');
-const PV = require('../polygon/PV');
 
 const sortByCorLonAsc = (obj1, obj2) => {
   return (obj1.cor.lon - obj2.cor.lon);
@@ -30,8 +28,20 @@ const sortByDist = (obj1, obj2) => {
 const calculateFlatRoofPanel = (
   RoofFoundLine, allKeepoutFoundLine, align, rotationAngle, panelWidth,
   panelLength, height, widthOffset, lengthOffset, panelTiltAngle,
-  initialArraySqeuenceNum
+  initArraySequenceNum
 ) => {
+  // 计算夹角
+  let angleDiff = 1;
+  if (rotationAngle <= 180 && rotationAngle > 90) {
+    angleDiff = 180 - rotationAngle;
+  } else if (rotationAngle > 0 && rotationAngle < 90) {
+    angleDiff = 90 - rotationAngle;
+  } else if (rotationAngle > 180 && rotationAngle < 270) {
+    angleDiff = 270 - rotationAngle;
+  } else if (rotationAngle > 270 && rotationAngle < 360) {
+    angleDiff = 360 - rotationAngle;
+  }
+
   // 朝向转换为 正北0度 正南180度 正东90度 正西270度 区间为-180到180度之间
   rotationAngle = -(rotationAngle + 180);
   if (rotationAngle > 180) {
@@ -64,7 +74,7 @@ const calculateFlatRoofPanel = (
   // 太阳能板起伏角度的sin
   const panelSin = Math.sin(panelTiltAngle * Math.PI / 180.0);
   // 太阳能板旋转角度cos
-  const rotationCos = Math.cos(rotationAngle * Math.PI / 180.0);
+  const rotationCos = Math.abs(Math.cos(angleDiff * Math.PI / 180.0));
 
   // 板斜摆之后实际对应外切矩形宽度
   let edgeLengthCorrespondingPanelWidth = Math.abs(
@@ -120,10 +130,11 @@ const calculateFlatRoofPanel = (
   // 铺板数据
   let maxPanelNum = 0;
   let drawingSequence = [];
+  let endArraySequenceNum = initArraySequenceNum;
 
   for (let planIndex = 0; planIndex < maximumPlansToTry; planIndex++) {
     // 阵列编码
-    let arraySequenceNum = initialArraySqeuenceNum;
+    let arraySequenceNum = initArraySequenceNum;
 
     let breakable = 0;
 
@@ -219,6 +230,7 @@ const calculateFlatRoofPanel = (
         case 1:
           corNorthList.sort(sortByCorLonAsc);
           break;
+        case 2:
         case 3:
           corNorthList.sort(sortByCorLatAsc);
           break;
@@ -648,9 +660,6 @@ const calculateFlatRoofPanel = (
               Point.fromCoordinate(PVEastNorthCor, 0.01),
               Point.fromCoordinate(PVWestNorthCor, 0.01)
             ]);
-            const pv = new PV(
-              null, null, Polygon.makeHierarchyFromPolyline(pvPolyline)
-            );
             let rowPos = null;
             if (c === 0 && c === cols - 1) {
               rowPos = 'single';
@@ -662,7 +671,7 @@ const calculateFlatRoofPanel = (
               rowPos = 'mid';
             }
             possibleDrawingSequence.push({
-              pv: pv,
+              pvPolyline: pvPolyline,
               height: height,
               rowPos: rowPos,
               sequence: arraySequenceNum,
@@ -676,7 +685,8 @@ const calculateFlatRoofPanel = (
       }
       // 更新下一行的 tempNorthCoordinate
       tempNorthCoordinate = Coordinate.destination(
-        tempSouthCoordinate, rowDirection,
+        tempSouthCoordinate,
+        rowDirection,
         edgeLengthCorrespondingWidthOffset
       );
       // 行数++
@@ -686,9 +696,10 @@ const calculateFlatRoofPanel = (
     if (totalPossiblePanels > maxPanelNum) {
       maxPanelNum = totalPossiblePanels;
       drawingSequence = possibleDrawingSequence;
+      endArraySequenceNum = arraySequenceNum;
     }
   }
-  return [maxPanelNum, drawingSequence];
+  return [endArraySequenceNum, drawingSequence];
 };
 
 module.exports = {

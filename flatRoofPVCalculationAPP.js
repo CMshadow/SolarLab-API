@@ -12,6 +12,8 @@ exports.lambdaHandler = async (event, context) => {
   const align = event.align;
   const height = event.height;
   let initArraySequenceNum = event.initArraySequenceNum;
+  const rowPerArray = event.rowPerArray;
+  const panelsPerRow = event.panelsPerRow;
 
   const convertedData = data.map(elem => {
     const allKeepoutFoundLine = elem[1].map(kpt => FoundLine.fromPolyline(kpt));
@@ -31,7 +33,9 @@ exports.lambdaHandler = async (event, context) => {
       rowSpace,
       colSpace,
       tilt,
-      initArraySequenceNum
+      initArraySequenceNum,
+      rowPerArray,
+      panelsPerRow
     );
     initArraySequenceNum = output[0];
     panelLayout.push(output[1]);

@@ -28,7 +28,7 @@ const sortByDist = (obj1, obj2) => {
 const calculateFlatRoofPanel = (
   RoofFoundLine, allKeepoutFoundLine, align, rotationAngle, panelWidth,
   panelLength, height, widthOffset, lengthOffset, panelTiltAngle,
-  initArraySequenceNum
+  initArraySequenceNum, rowPerArray, panelsPerRow
 ) => {
   // 计算夹角
   let angleDiff = 1;
@@ -78,8 +78,9 @@ const calculateFlatRoofPanel = (
 
   // 板斜摆之后实际对应外切矩形宽度
   let edgeLengthCorrespondingPanelWidth = Math.abs(
-    panelWidth * panelCos / rotationCos
+    panelWidth * rowPerArray * panelCos / rotationCos
   );
+  console.log(edgeLengthCorrespondingPanelWidth)
   if (rotationAngle === 90 || rotationAngle === -90) {
     edgeLengthCorrespondingPanelWidth = Math.abs(panelWidth * panelCos);
   }
@@ -91,8 +92,9 @@ const calculateFlatRoofPanel = (
 
   // 每次向下平移0.1m，最多需要测试的铺板方案数
   const maximumPlansToTry = parseInt(
-    ((panelWidth * panelCos) + widthOffset) / 0.1, 10
+    ((panelWidth * rowPerArray * panelCos) + widthOffset) / 0.1, 10
   );
+  console.log(maximumPlansToTry)
 
   // 六种朝向模式
   let rotationMode = null;
@@ -193,6 +195,7 @@ const calculateFlatRoofPanel = (
     // 行数
     let rowNum = 0;
     while (breakable !== 2) {
+      console.log(tempNorthCoordinate)
       // corNorthList - 北线交点坐标array
       const corNorthList = [];
       // 计算多边形每条线与北线的交点坐标，如果存在加入到corNorthList
@@ -326,12 +329,12 @@ const calculateFlatRoofPanel = (
         const corNorthLeftToSouth = Coordinate.destination(
           corNorthLeft,
           -rotationAngle + 180,
-          panelWidth * panelCos
+          panelWidth * rowPerArray * panelCos
         );
         const corNorthRightToSouth = Coordinate.destination(
           corNorthRight,
           -rotationAngle + 180,
-          panelWidth * panelCos
+          panelWidth * rowPerArray * panelCos
         );
 
         for (let f = 0; f < corSouthList.length; f += 2) {
@@ -447,12 +450,12 @@ const calculateFlatRoofPanel = (
           let rightRefCorToNorth = Coordinate.destination(
             rightRefCor,
             -rotationAngle,
-            panelWidth * panelCos
+            panelWidth * rowPerArray * panelCos
           );
           let leftRefCorToNorth = Coordinate.destination(
             leftRefCor,
             -rotationAngle,
-            panelWidth * panelCos
+            panelWidth * rowPerArray * panelCos
           );
 
           const boxBot = new MathLine(
@@ -547,7 +550,7 @@ const calculateFlatRoofPanel = (
             leftRefCorToNorth = Coordinate.destination(
               leftRefCor,
               -rotationAngle,
-              panelWidth * panelCos
+              panelWidth * rowPerArray * panelCos
             );
           }
           if (rightCors.length !== 0) {
@@ -555,7 +558,7 @@ const calculateFlatRoofPanel = (
             rightRefCorToNorth = Coordinate.destination(
               rightRefCor,
               -rotationAngle,
-              panelWidth * panelCos
+              panelWidth * rowPerArray * panelCos
             );
           }
           if (leftCors.length > 0 || rightCors.length > 0) {
@@ -614,70 +617,80 @@ const calculateFlatRoofPanel = (
             possibleBoxLineCollection.mathLineCollection[1].originCor
           );
           // colSpaceCheck - 检查该列空间是否够放一组阵列
-          const colSpaceCheck = maxHorizenDist - panelLength;
+          const colSpaceCheck = maxHorizenDist - (panelLength * panelsPerRow);
           // cols - 该列能摆板的阵列数
           let cols = 0;
           if (colSpaceCheck >= 0) {
-            cols = parseInt(colSpaceCheck / (panelLength + lengthOffset), 10) + 1;
+            cols = parseInt(
+              colSpaceCheck / (panelLength * panelsPerRow + lengthOffset), 10
+            ) + 1;
           }
 
           let startingGap = null;
           if (align === 'left') {
             startingGap = 0;
           } else if (align === 'center') {
-            startingGap = (maxHorizenDist - panelLength -
-            (cols - 1) * (panelLength + lengthOffset)) / 2;
+            startingGap = (maxHorizenDist - (panelLength * panelsPerRow) -
+            (cols - 1) * (panelLength * panelsPerRow + lengthOffset)) / 2;
           } else {
-            startingGap = (maxHorizenDist - panelLength -
-            (cols - 1) * (panelLength + lengthOffset));
+            startingGap = (maxHorizenDist - (panelLength * panelsPerRow) -
+            (cols - 1) * (panelLength * panelsPerRow + lengthOffset));
           }
 
           for (let c = 0; c < cols; c++) {
-            totalPossiblePanels += 1;
-            const PVWestCor = Coordinate.destination(
-              possibleBoxLineCollection.mathLineCollection[0].originCor,
-              -rotationAngle + 90,
-              c * (panelLength + lengthOffset) + startingGap
-            );
-            const PVEastCor = Coordinate.destination(
-              PVWestCor, -rotationAngle + 90, panelLength
-            );
-            const PVWestNorthCor = Coordinate.destination(
-              PVWestCor, -rotationAngle, panelWidth * panelCos
-            );
-            PVWestNorthCor.setCoordinate(
-              null, null, height + panelSin * panelWidth
-            );
-            const PVEastNorthCor = Coordinate.destination(
-              PVEastCor, -rotationAngle, panelWidth * panelCos
-            );
-            PVEastNorthCor.setCoordinate(
-              null, null, height + panelSin * panelWidth
-            );
-            const pvPolyline = new Polyline([
-              Point.fromCoordinate(PVWestCor, 0.01),
-              Point.fromCoordinate(PVEastCor, 0.01),
-              Point.fromCoordinate(PVEastNorthCor, 0.01),
-              Point.fromCoordinate(PVWestNorthCor, 0.01)
-            ]);
-            let rowPos = null;
-            if (c === 0 && c === cols - 1) {
-              rowPos = 'single';
-            } else if (c === 0) {
-              rowPos = 'start';
-            } else if (c === cols - 1) {
-              rowPos = 'end';
-            } else {
-              rowPos = 'mid';
+            for (let r = 0; r < rowPerArray; r++) {
+              for (let p = 0; p < panelsPerRow; p++) {
+                totalPossiblePanels += 1;
+                const PVWestCor = Coordinate.destination(
+                  Coordinate.destination(
+                    possibleBoxLineCollection.mathLineCollection[0].originCor,
+                    -rotationAngle + 90,
+                    c * (panelLength * (p + 1) + lengthOffset) + startingGap
+                  ),
+                  -rotationAngle,
+                  panelWidth * r * panelCos
+                );
+                const PVEastCor = Coordinate.destination(
+                  PVWestCor, -rotationAngle + 90, panelLength
+                );
+                const PVWestNorthCor = Coordinate.destination(
+                  PVWestCor, -rotationAngle, panelWidth * panelCos
+                );
+                PVWestNorthCor.setCoordinate(
+                  null, null, height + panelSin * panelWidth
+                );
+                const PVEastNorthCor = Coordinate.destination(
+                  PVEastCor, -rotationAngle, panelWidth * panelCos
+                );
+                PVEastNorthCor.setCoordinate(
+                  null, null, height + panelSin * panelWidth
+                );
+                const pvPolyline = new Polyline([
+                  Point.fromCoordinate(PVWestCor, 0.01),
+                  Point.fromCoordinate(PVEastCor, 0.01),
+                  Point.fromCoordinate(PVEastNorthCor, 0.01),
+                  Point.fromCoordinate(PVWestNorthCor, 0.01)
+                ]);
+                let rowPos = null;
+                if (c === 0 && c === cols - 1) {
+                  rowPos = 'single';
+                } else if (c === 0) {
+                  rowPos = 'start';
+                } else if (c === cols - 1) {
+                  rowPos = 'end';
+                } else {
+                  rowPos = 'mid';
+                }
+                possibleDrawingSequence.push({
+                  pvPolyline: pvPolyline,
+                  height: height,
+                  rowPos: rowPos,
+                  sequence: arraySequenceNum,
+                  col: c,
+                  row: rowNum
+                });
+              }
             }
-            possibleDrawingSequence.push({
-              pvPolyline: pvPolyline,
-              height: height,
-              rowPos: rowPos,
-              sequence: arraySequenceNum,
-              col: c,
-              row: rowNum
-            });
           }
           // 阵列编号++
           arraySequenceNum++;

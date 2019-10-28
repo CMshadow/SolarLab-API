@@ -4,21 +4,21 @@ Resources:
   SetbackPolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/3faae29f2af459a65e0eea211b004760
+      CodeUri: s3://solarlab-sam-lambda/ef42f4bd008a95bb7acc7cfe1c643349
       Handler: setbackPolylineCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   PassagePolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/3faae29f2af459a65e0eea211b004760
+      CodeUri: s3://solarlab-sam-lambda/ef42f4bd008a95bb7acc7cfe1c643349
       Handler: passageSetbackCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   FlatRoofPVCalculationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/3faae29f2af459a65e0eea211b004760
+      CodeUri: s3://solarlab-sam-lambda/ef42f4bd008a95bb7acc7cfe1c643349
       Handler: flatRoofPVCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15

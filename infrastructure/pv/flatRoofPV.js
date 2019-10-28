@@ -80,7 +80,6 @@ const calculateFlatRoofPanel = (
   let edgeLengthCorrespondingPanelWidth = Math.abs(
     panelWidth * rowPerArray * panelCos / rotationCos
   );
-  console.log(edgeLengthCorrespondingPanelWidth)
   if (rotationAngle === 90 || rotationAngle === -90) {
     edgeLengthCorrespondingPanelWidth = Math.abs(panelWidth * panelCos);
   }
@@ -94,7 +93,6 @@ const calculateFlatRoofPanel = (
   const maximumPlansToTry = parseInt(
     ((panelWidth * rowPerArray * panelCos) + widthOffset) / 0.1, 10
   );
-  console.log(maximumPlansToTry)
 
   // 六种朝向模式
   let rotationMode = null;
@@ -195,7 +193,6 @@ const calculateFlatRoofPanel = (
     // 行数
     let rowNum = 0;
     while (breakable !== 2) {
-      console.log(tempNorthCoordinate)
       // corNorthList - 北线交点坐标array
       const corNorthList = [];
       // 计算多边形每条线与北线的交点坐标，如果存在加入到corNorthList
@@ -638,6 +635,7 @@ const calculateFlatRoofPanel = (
           }
 
           for (let c = 0; c < cols; c++) {
+            const panelArray = [];
             for (let r = 0; r < rowPerArray; r++) {
               for (let p = 0; p < panelsPerRow; p++) {
                 totalPossiblePanels += 1;
@@ -688,7 +686,7 @@ const calculateFlatRoofPanel = (
                 } else {
                   rowPos = 'mid';
                 }
-                possibleDrawingSequence.push({
+                panelArray.push({
                   pvPolyline: pvPolyline,
                   height: height,
                   rowPos: rowPos,
@@ -698,6 +696,7 @@ const calculateFlatRoofPanel = (
                 });
               }
             }
+            possibleDrawingSequence.push(panelArray);
           }
           // 阵列编号++
           arraySequenceNum++;

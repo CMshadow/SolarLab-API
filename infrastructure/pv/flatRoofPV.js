@@ -645,25 +645,32 @@ const calculateFlatRoofPanel = (
                   Coordinate.destination(
                     possibleBoxLineCollection.mathLineCollection[0].originCor,
                     -rotationAngle + 90,
-                    c * (panelLength * (p + 1) + lengthOffset) + startingGap
+                    c * (panelLength * panelsPerRow + lengthOffset) +
+                    (panelLength * p) + startingGap
                   ),
                   -rotationAngle,
                   panelWidth * r * panelCos
                 );
+                PVWestCor.setCoordinate(
+                  null, null, height + panelSin * panelWidth * r
+                );
                 const PVEastCor = Coordinate.destination(
                   PVWestCor, -rotationAngle + 90, panelLength
+                );
+                PVEastCor.setCoordinate(
+                  null, null, height + panelSin * panelWidth * r
                 );
                 const PVWestNorthCor = Coordinate.destination(
                   PVWestCor, -rotationAngle, panelWidth * panelCos
                 );
                 PVWestNorthCor.setCoordinate(
-                  null, null, height + panelSin * panelWidth
+                  null, null, height + panelSin * panelWidth * (r + 1)
                 );
                 const PVEastNorthCor = Coordinate.destination(
                   PVEastCor, -rotationAngle, panelWidth * panelCos
                 );
                 PVEastNorthCor.setCoordinate(
-                  null, null, height + panelSin * panelWidth
+                  null, null, height + panelSin * panelWidth * (r + 1)
                 );
                 const pvPolyline = new Polyline([
                   Point.fromCoordinate(PVWestCor, 0.01),
@@ -705,14 +712,21 @@ const calculateFlatRoofPanel = (
       // 行数++
       rowNum++;
     }
+    drawingSequence.push({
+      num: totalPossiblePanels,
+      sequence: possibleDrawingSequence
+    });
     // 判断是不是最大铺板方案
     if (totalPossiblePanels > maxPanelNum) {
       maxPanelNum = totalPossiblePanels;
-      drawingSequence = possibleDrawingSequence;
       endArraySequenceNum = arraySequenceNum;
     }
   }
-  return [endArraySequenceNum, drawingSequence];
+  drawingSequence = drawingSequence.filter(s => s.num === maxPanelNum);
+  return [
+    endArraySequenceNum,
+    drawingSequence[Math.floor(drawingSequence.length / 2)].sequence
+  ];
 };
 
 module.exports = {

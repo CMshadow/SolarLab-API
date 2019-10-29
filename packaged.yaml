@@ -4,28 +4,42 @@ Resources:
   SetbackPolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/246de4297efff350920b216b539b8892
+      CodeUri: s3://solarlab-sam-lambda/3710941422e1a206cec3b48d0b7db356
       Handler: setbackPolylineCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   PassagePolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/246de4297efff350920b216b539b8892
+      CodeUri: s3://solarlab-sam-lambda/3710941422e1a206cec3b48d0b7db356
       Handler: passageSetbackCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   FlatRoofPVCalculationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/246de4297efff350920b216b539b8892
+      CodeUri: s3://solarlab-sam-lambda/3710941422e1a206cec3b48d0b7db356
       Handler: flatRoofPVCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   createPanelFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/246de4297efff350920b216b539b8892
+      CodeUri: s3://solarlab-sam-lambda/3710941422e1a206cec3b48d0b7db356
       Handler: createPanelAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15
+  getPanelFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://solarlab-sam-lambda/3710941422e1a206cec3b48d0b7db356
+      Handler: getPanelAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15
+  createInverterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://solarlab-sam-lambda/3710941422e1a206cec3b48d0b7db356
+      Handler: createInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15

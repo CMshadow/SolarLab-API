@@ -2,9 +2,9 @@ const AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-west-1' });
 const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
-exports.lambdaHandler = async (event, context) => {
-  const userId = event.userId;
-  const panelId = event.panelId;
+exports.lambdaHandler = async (event, context, callback) => {
+  const panelID = event.panelID;
+  const userID = event.userID;
   const panelName = event.panelName;
   const createdAt = event.createdAt;
   const updatedAt = event.updatedAt;
@@ -26,14 +26,43 @@ exports.lambdaHandler = async (event, context) => {
 
   const params = {
     Item: {
-      userId: { S: '0000-0000-0000-0000' },
-      panelId: { S: '01' }
+      panelID: { S: panelID },
+      userID: { S: userID },
+      panelName: { S: panelName },
+      createdAt: { S: createdAt },
+      updatedAt: { S: updatedAt },
+      aisc: { N: aisc },
+      bvoco: { N: bvoco },
+      cost: { N: cost },
+      description: { S: description },
+      impo: { N: impo },
+      isco: { N: isco },
+      ixo: { N: ixo },
+      ixxo: { N: ixxo },
+      panelLength: { N: panelLength },
+      panelWidth: { N: panelWidth },
+      material: { S: material },
+      parallelCells: { N: parallelCells },
+      seriesCells: { N: seriesCells },
+      vmpo: { N: vmpo },
+      voco: { N: voco }
     },
-    TableName: 'userPanel'
+    TableName: 'SolarLab-UsersPanelData'
   };
 
-  dynamodb.putItem(params, (err, data) => {
-    if (err) console.log(err);
-    else console.log(data);
+  const putItem = new Promise((resolve, reject) => {
+    dynamodb.putItem(params, (err, data) => {
+      if (err) {
+        console.log('Error', err);
+        reject(err);
+      } else {
+        console.log('Success', data);
+        resolve('Insert data completed');
+      }
+    });
   });
+
+  const result = await putItem;
+  console.log(result);
+  return result;
 };

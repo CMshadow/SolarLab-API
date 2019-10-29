@@ -30,3 +30,17 @@ Resources:
       Handler: createPanelAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
+  getPanelFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./
+      Handler: getPanelAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15
+  createInverterFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ./
+      Handler: createInverterAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15

@@ -3,8 +3,8 @@ AWS.config.update({ region: 'us-west-1' });
 const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
 exports.lambdaHandler = async (event, context, callback) => {
-  const inverterID = event.inverterID;
   const userID = event.userID;
+  const inverterID = event.inverterID;
   const inverterName = event.inverterName;
   const createdAt = event.createdAt;
   const updatedAt = event.updatedAt;
@@ -24,8 +24,8 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   const params = {
     Item: {
-      inverterID: { S: inverterID },
       userID: { S: userID },
+      inverterID: { S: inverterID },
       inverterName: { S: inverterName },
       createdAt: { S: createdAt },
       updatedAt: { S: updatedAt },
@@ -43,7 +43,7 @@ exports.lambdaHandler = async (event, context, callback) => {
       vdco: { N: vdco },
       vs0: { N: vs0 }
     },
-    TableName: 'SolarLab-UsersInverterData'
+    TableName: 'SolarLab-UsersInverter'
   };
 
   const putItem = new Promise((resolve, reject) => {

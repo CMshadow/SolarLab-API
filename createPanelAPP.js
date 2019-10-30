@@ -3,8 +3,8 @@ AWS.config.update({ region: 'us-west-1' });
 const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
 exports.lambdaHandler = async (event, context, callback) => {
-  const panelID = event.panelID;
   const userID = event.userID;
+  const panelID = event.panelID;
   const panelName = event.panelName;
   const createdAt = event.createdAt;
   const updatedAt = event.updatedAt;
@@ -26,8 +26,8 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   const params = {
     Item: {
-      panelID: { S: panelID },
       userID: { S: userID },
+      panelID: { S: panelID },
       panelName: { S: panelName },
       createdAt: { S: createdAt },
       updatedAt: { S: updatedAt },
@@ -47,7 +47,7 @@ exports.lambdaHandler = async (event, context, callback) => {
       vmpo: { N: vmpo },
       voco: { N: voco }
     },
-    TableName: 'SolarLab-UsersPanelData'
+    TableName: 'SolarLab-UsersPanel'
   };
 
   const putItem = new Promise((resolve, reject) => {

@@ -2,17 +2,16 @@ const AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-west-1' });
 const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
-const lambdaHandler = async (event, context, callback) => {
+exports.lambdaHandler = async (event, context, callback) => {
+  const userID = event.userID;
+  const projection = event.attributes.join(', ');
+
   const params = {
-    TableName: 'SolarLab-UsersPanelData',
-    IndexName: 'userID',
-    KeyConditionExpression: '#userID = :userID',
-    ProjectionExpression: 'panelID, panelName, panelLength, panelWidth',
-    ExpressionAttributeNames: {
-      '#userID': 'userID'
-    },
+    TableName: 'SolarLab-UsersPanel',
+    KeyConditionExpression: 'userID = :userID',
+    ProjectionExpression: projection,
     ExpressionAttributeValues: {
-      ':userID': { S: '0000-0000-0000-0000' }
+      ':userID': { S: userID }
     }
   };
 
@@ -37,5 +36,3 @@ const lambdaHandler = async (event, context, callback) => {
   const result = await queryItems;
   return result;
 };
-
-lambdaHandler();

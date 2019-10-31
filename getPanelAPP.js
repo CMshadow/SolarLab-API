@@ -4,16 +4,15 @@ const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
 exports.lambdaHandler = async (event, context, callback) => {
   const userID = event.userID;
-  const projection = event.attributes.join(', ');
 
   const params = {
     TableName: 'SolarLab-UsersPanel',
     KeyConditionExpression: 'userID = :userID',
-    ProjectionExpression: projection,
     ExpressionAttributeValues: {
       ':userID': { S: userID }
     }
   };
+  if (event.attributes !== '') params.ProjectionExpression = event.attributes;
 
   const queryItems = new Promise((resolve, reject) => {
     dynamodb.query(params, (err, data) => {

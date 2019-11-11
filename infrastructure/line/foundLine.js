@@ -58,12 +58,13 @@ class FoundLine extends Polyline {
     const result = [];
     for (const direction of [90, -90]) {
       const stbMathLineCollection = new MathLineCollection();
-      for (const mathLine of mathLineCollection.mathLineCollection) {
+      mathLineCollection.mathLineCollection.forEach((mathLine, index) => {
         const anchor = Coordinate.destination(
-          mathLine.originCor, mathLine.brng + direction, stbDist
+          mathLine.originCor, mathLine.brng + direction,
+          stbDist instanceof Array ? stbDist[index] : stbDist
         );
         stbMathLineCollection.addMathLine(new MathLine(anchor, mathLine.brng));
-      }
+      });
       stbMathLineCollection.mathLineCollection.forEach((mathLine, index) => {
         let nextMathLine = null;
         if (index < stbMathLineCollection.length() - 1) {

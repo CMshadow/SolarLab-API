@@ -4,42 +4,49 @@ Resources:
   SetbackPolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/373dfa8f1c05dffa7e9569b7ea033478
+      CodeUri: s3://solarlab-sam-lambda/04e41fc586f608c9ee1528ff5674650f
       Handler: setbackPolylineCalculationAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15
+  SetbackPolylinePitchedRoofFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://solarlab-sam-lambda/04e41fc586f608c9ee1528ff5674650f
+      Handler: setbackPolylinePitchedRoofCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   PassagePolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/0400bcdd9d913821875fb5068f88d74c
+      CodeUri: s3://solarlab-sam-lambda/04e41fc586f608c9ee1528ff5674650f
       Handler: passageSetbackCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   FlatRoofPVCalculationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/0400bcdd9d913821875fb5068f88d74c
+      CodeUri: s3://solarlab-sam-lambda/04e41fc586f608c9ee1528ff5674650f
       Handler: flatRoofPVCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   createPanelFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/0400bcdd9d913821875fb5068f88d74c
+      CodeUri: s3://solarlab-sam-lambda/04e41fc586f608c9ee1528ff5674650f
       Handler: createPanelAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   getPanelFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/0400bcdd9d913821875fb5068f88d74c
+      CodeUri: s3://solarlab-sam-lambda/04e41fc586f608c9ee1528ff5674650f
       Handler: getPanelAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   createInverterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/0400bcdd9d913821875fb5068f88d74c
+      CodeUri: s3://solarlab-sam-lambda/04e41fc586f608c9ee1528ff5674650f
       Handler: createInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15

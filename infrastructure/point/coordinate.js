@@ -138,6 +138,42 @@ class Coordinate {
     }
     return undefined;
   }
+
+  static heightOfArbitraryNode (path, point) {
+    let heightOfPoint = null;
+    let outerEdge = null;
+    for (let edge = 0; edge < path.edgesCollection.length; ++edge) {
+      if (path.edgesCollection[edge].type === 'OuterEdge') {
+        outerEdge = edge;
+      }
+    }
+    if (outerEdge !== null) {
+      const startNode = new Coordinate(
+        path.edgesCollection[outerEdge].startNodePara.lon,
+        path.edgesCollection[outerEdge].startNodePara.lat,
+        path.edgesCollection[outerEdge].startNodePara.height
+      );
+      const endNode = new Coordinate(
+        path.edgesCollection[outerEdge].endNodePara.lon,
+        path.edgesCollection[outerEdge].endNodePara.lat,
+        path.edgesCollection[outerEdge].endNodePara.height
+      );
+
+      const edgeBrng = Coordinate.bearing(startNode, endNode);
+      const interPoint1 = Coordinate.intersection(
+        point, path.brng, startNode, edgeBrng
+      );
+      const interPoint2 = Coordinate.intersection(
+        point, path.brng + 180, startNode, edgeBrng
+      );
+      const shortestDist1 = Coordinate.surfaceDistance(point, interPoint1);
+      const shortestDist2 = Coordinate.surfaceDistance(point, interPoint2);
+      const shortestDist =
+        shortestDist1 < shortestDist2 ? shortestDist1 : shortestDist2;
+      heightOfPoint = Math.tan(path.obliquity * Math.PI / 180) * shortestDist;
+    }
+    return heightOfPoint;
+  }
 }
 
 module.exports = Coordinate;

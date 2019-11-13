@@ -154,7 +154,7 @@ const calculatePitchedRoofPanel = (
       case 1:
         tempNorthCoordinate = Coordinate.destination(
           new Coordinate(west, north, Coordinate.heightOfArbitraryNode(
-            pitchedRoofPolygon, Coordinate(west, north, 0)
+            pitchedRoofPolygon, new Coordinate(west, north, 0)
           )),
           rowDirection,
           planIndex * 0.1 / rotationCos
@@ -163,7 +163,7 @@ const calculatePitchedRoofPanel = (
       case 2:
         tempNorthCoordinate = Coordinate.destination(
           new Coordinate(west, south, Coordinate.heightOfArbitraryNode(
-            pitchedRoofPolygon, Coordinate(west, south, 0)
+            pitchedRoofPolygon, new Coordinate(west, south, 0)
           )),
           rowDirection,
           planIndex * 0.1
@@ -172,7 +172,7 @@ const calculatePitchedRoofPanel = (
       case 3:
         tempNorthCoordinate = Coordinate.destination(
           new Coordinate(west, south, Coordinate.heightOfArbitraryNode(
-            pitchedRoofPolygon, Coordinate(west, south, 0)
+            pitchedRoofPolygon, new Coordinate(west, south, 0)
           )),
           rowDirection,
           planIndex * 0.1 / rotationCos
@@ -181,7 +181,7 @@ const calculatePitchedRoofPanel = (
       case 4:
         tempNorthCoordinate = Coordinate.destination(
           new Coordinate(east, north, Coordinate.heightOfArbitraryNode(
-            pitchedRoofPolygon, Coordinate(east, north, 0)
+            pitchedRoofPolygon, new Coordinate(east, north, 0)
           )),
           rowDirection,
           planIndex * 0.1 / rotationCos
@@ -190,7 +190,7 @@ const calculatePitchedRoofPanel = (
       case 5:
         tempNorthCoordinate = Coordinate.destination(
           new Coordinate(east, north, Coordinate.heightOfArbitraryNode(
-            pitchedRoofPolygon, Coordinate(east, north, 0)
+            pitchedRoofPolygon, new Coordinate(east, north, 0)
           )),
           rowDirection,
           planIndex * 0.1
@@ -199,7 +199,7 @@ const calculatePitchedRoofPanel = (
       case 6:
         tempNorthCoordinate = Coordinate.destination(
           new Coordinate(east, south, Coordinate.heightOfArbitraryNode(
-            pitchedRoofPolygon, Coordinate(east, south, 0)
+            pitchedRoofPolygon, new Coordinate(east, south, 0)
           )),
           rowDirection,
           planIndex * 0.1 / rotationCos
@@ -671,25 +671,34 @@ const calculatePitchedRoofPanel = (
                   panelWidth * r * panelCos
                 );
                 PVWestCor.setCoordinate(
-                  null, null, height + panelSin * panelWidth * r
+                  null, null,
+                  Coordinate.heightOfArbitraryNode(
+                    pitchedRoofPolygon, PVWestCor
+                  ) + height + panelSin * panelWidth * r
                 );
                 const PVEastCor = Coordinate.destination(
                   PVWestCor, -rotationAngle + 90, panelLength * pitchedRoofCos
                 );
                 PVEastCor.setCoordinate(
-                  null, null, height + panelSin * panelWidth * r
+                  null, null, Coordinate.heightOfArbitraryNode(
+                    pitchedRoofPolygon, PVEastCor
+                  ) + height + panelSin * panelWidth * r
                 );
                 const PVWestNorthCor = Coordinate.destination(
                   PVWestCor, -rotationAngle, panelWidth * panelCos
                 );
                 PVWestNorthCor.setCoordinate(
-                  null, null, height + panelSin * panelWidth * (r + 1)
+                  null, null, Coordinate.heightOfArbitraryNode(
+                    pitchedRoofPolygon, PVWestNorthCor
+                  ) + height + panelSin * panelWidth * (r + 1)
                 );
                 const PVEastNorthCor = Coordinate.destination(
                   PVEastCor, -rotationAngle, panelWidth * panelCos
                 );
                 PVEastNorthCor.setCoordinate(
-                  null, null, height + panelSin * panelWidth * (r + 1)
+                  null, null, Coordinate.heightOfArbitraryNode(
+                    pitchedRoofPolygon, PVEastNorthCor
+                  ) + height + panelSin * panelWidth * (r + 1)
                 );
                 const pvPolyline = new Polyline([
                   Point.fromCoordinate(PVWestCor, 0.01),
@@ -697,6 +706,7 @@ const calculatePitchedRoofPanel = (
                   Point.fromCoordinate(PVEastNorthCor, 0.01),
                   Point.fromCoordinate(PVWestNorthCor, 0.01)
                 ]);
+                console.log(pvPolyline)
                 let rowPos = null;
                 if (c === 0 && c === cols - 1) {
                   rowPos = 'single';

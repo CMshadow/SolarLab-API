@@ -22,37 +22,33 @@ exports.lambdaHandler = async (event, context) => {
 
   const panelLayout = [];
   convertedData.forEach(partialRoof => {
-    const output = FlatRoofPV.calculateFlatRoofPanel(
-      partialRoof[0],
-      partialRoof[1],
-      align,
-      azimuth,
-      panelWidth,
-      panelLength,
-      height,
-      rowSpace,
-      colSpace,
-      tilt,
-      initArraySequenceNum,
-      rowPerArray,
-      panelsPerRow
-    );
-    initArraySequenceNum = output[0];
-    panelLayout.push(output[1]);
+    try {
+      const output = FlatRoofPV.calculateFlatRoofPanel(
+        partialRoof[0],
+        partialRoof[1],
+        align,
+        azimuth,
+        panelWidth,
+        panelLength,
+        height,
+        rowSpace,
+        colSpace,
+        tilt,
+        initArraySequenceNum,
+        rowPerArray,
+        panelsPerRow
+      );
+      initArraySequenceNum = output[0];
+      panelLayout.push(output[1]);
+    } catch (err) {
+      throw new Error(`Error: ${err.toString()}`);
+    }
   });
 
-  let response;
-  try {
-    response = {
-      statusCode: 200,
-      body: JSON.stringify({
-        panelLayout: panelLayout
-      })
-    };
-  } catch (err) {
-    console.log(err);
-    return err;
-  }
-
-  return response;
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      panelLayout: panelLayout
+    })
+  };
 };

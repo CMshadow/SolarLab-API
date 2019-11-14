@@ -60,8 +60,8 @@ class Coordinate {
 
   static linearDistance (cor1, cor2) {
     return Cesium.Cartesian3.distance(
-      Cesium.Cartesian3.fromDegreesArrayHeights(cor1.getCoordinate(true)),
-      Cesium.Cartesian3.fromDegreesArrayHeights(cor2.getCoordinate(true))
+      Cesium.Cartesian3.fromDegrees(...cor1.getCoordinate(true)),
+      Cesium.Cartesian3.fromDegrees(...cor2.getCoordinate(true))
     );
   }
 

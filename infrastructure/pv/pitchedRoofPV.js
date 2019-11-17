@@ -1,7 +1,7 @@
-const Cesium = require('cesium');
 const MathLineCollection = require('../math/mathLineCollection.js');
 const MathLine = require('../math/mathLine.js');
 const MyMath = require('../math/polygonMath.js');
+const BasicMath = require('../math/math');
 const Coordinate = require('../point/coordinate');
 const Point = require('../point/point');
 const Polyline = require('../line/polyline');
@@ -73,30 +73,83 @@ const calculatePitchedRoofPanel = (
   // 太阳能板起伏角度的cos
   const panelCos = Math.cos((panelTiltAngle + obliquity) * Math.PI / 180.0);
   // 太阳能板起伏角度的sin
-  const panelSin = Math.sin(panelTiltAngle * Math.PI / 180.0);
+  const panelSin = Math.sin((panelTiltAngle + obliquity) * Math.PI / 180.0);
+  // 太阳能板起伏角度的tan
+  const panelTan = Math.tan((panelTiltAngle + obliquity) * Math.PI / 180.0);
   // 太阳能板旋转角度cos
   const rotationCos = Math.abs(Math.cos(angleDiff * Math.PI / 180.0));
   // 屋顶鞋面倾角cos
   const pitchedRoofCos = Math.abs(Math.cos(obliquity * Math.PI / 180.0));
+  // console.log('pitchedRoofCos')
+  // console.log(pitchedRoofCos)
+  // 斜面朝向和铺板朝向之间的角度差
+  let lengthBrngDiff = BasicMath.angleBetweenBrngs(
+    pitchedRoofPolygon.brng, -rotationAngle + 90
+  );
+  // console.log('lengthBrngDiff')
+  // console.log(lengthBrngDiff)
+  if (lengthBrngDiff > 90) lengthBrngDiff = 180 - lengthBrngDiff;
+  const lengthBrngDiffCos = Math.abs(Math.cos(lengthBrngDiff * Math.PI / 180.0));
+  const lengthBrngDiffSin = Math.abs(Math.sin(lengthBrngDiff * Math.PI / 180.0));
+  // 板长度在平面的映射长度
+  const xAxisLen = panelLength * lengthBrngDiffCos * pitchedRoofCos;
+  const yAxisLen = panelLength * lengthBrngDiffSin;
+  // console.log(xAxisLen)
+  // console.log(yAxisLen)
+  const flatPanelLength = Math.sqrt(
+    xAxisLen * xAxisLen + yAxisLen * yAxisLen
+  );
+  // 板长度间距在平面的映射长度
+  const xAxisLenOffset = lengthOffset * lengthBrngDiffCos * pitchedRoofCos;
+  const yAxisLenOffset = lengthOffset * lengthBrngDiffSin;
+  const flatLengthOffset = Math.sqrt(
+    xAxisLenOffset * xAxisLenOffset + yAxisLenOffset * yAxisLenOffset
+  );
+
+  // 斜面朝向和铺板垂直朝向之间的角度差
+  let widthBrngDiff = BasicMath.angleBetweenBrngs(
+    pitchedRoofPolygon.brng, -rotationAngle
+  );
+  if (widthBrngDiff > 90) widthBrngDiff = 180 - widthBrngDiff;
+  const widthBrngDiffCos = Math.abs(Math.cos(widthBrngDiff * Math.PI / 180.0));
+  const widthBrngDiffSin = Math.abs(Math.sin(widthBrngDiff * Math.PI / 180.0));
+  // console.log('widthBrngDiff')
+  // console.log(widthBrngDiff)
+  // 板宽度在平面的映射长度
+  const xAxisWid = panelWidth * widthBrngDiffCos * panelCos;
+  const yAxisWid = panelWidth * widthBrngDiffSin;
+  const flatPanelWidth = Math.sqrt(
+    xAxisWid * xAxisWid + yAxisWid * yAxisWid
+  );
+  // 板宽度度间距在平面的映射长度
+  const xAxisWidOffset = widthOffset * widthBrngDiffCos * pitchedRoofCos;
+  const yAxisWidOffset = widthOffset * widthBrngDiffSin;
+  const flatWidthOffset = Math.sqrt(
+    xAxisWidOffset * xAxisWidOffset + yAxisWidOffset * yAxisWidOffset
+  );
+  // console.log(flatPanelLength)
+  // console.log(flatLengthOffset)
+  // console.log(flatPanelWidth)
+  // console.log(flatWidthOffset)
 
   // 板斜摆之后实际对应外切矩形宽度
   let edgeLengthCorrespondingPanelWidth = Math.abs(
-    panelWidth * rowPerArray * panelCos / rotationCos
+    flatPanelWidth * rowPerArray / rotationCos
   );
   if (rotationAngle === 90 || rotationAngle === -90) {
-    edgeLengthCorrespondingPanelWidth = Math.abs(panelWidth * panelCos);
+    edgeLengthCorrespondingPanelWidth = flatPanelWidth * rowPerArray;
   }
   // 板间距斜摆之后实际对应外切矩形宽度
   let edgeLengthCorrespondingWidthOffset = Math.abs(
-    widthOffset * pitchedRoofCos / rotationCos
+    flatWidthOffset / rotationCos
   );
   if (rotationAngle === 90 || rotationAngle === -90) {
-    edgeLengthCorrespondingWidthOffset = widthOffset * pitchedRoofCos;
+    edgeLengthCorrespondingWidthOffset = flatWidthOffset;
   }
 
   // 每次向下平移0.1m，最多需要测试的铺板方案数
   const maximumPlansToTry = parseInt(
-    ((panelWidth * rowPerArray * panelCos) + (widthOffset * pitchedRoofCos)) / 0.1,
+    (flatPanelWidth + flatWidthOffset) / 0.1,
     10
   );
 
@@ -344,12 +397,12 @@ const calculatePitchedRoofPanel = (
         const corNorthLeftToSouth = Coordinate.destination(
           corNorthLeft,
           -rotationAngle + 180,
-          panelWidth * rowPerArray * panelCos
+          flatPanelWidth * rowPerArray
         );
         const corNorthRightToSouth = Coordinate.destination(
           corNorthRight,
           -rotationAngle + 180,
-          panelWidth * rowPerArray * panelCos
+          flatPanelWidth * rowPerArray
         );
 
         for (let f = 0; f < corSouthList.length; f += 2) {
@@ -465,12 +518,12 @@ const calculatePitchedRoofPanel = (
           let rightRefCorToNorth = Coordinate.destination(
             rightRefCor,
             -rotationAngle,
-            panelWidth * rowPerArray * panelCos
+            flatPanelWidth * rowPerArray
           );
           let leftRefCorToNorth = Coordinate.destination(
             leftRefCor,
             -rotationAngle,
-            panelWidth * rowPerArray * panelCos
+            flatPanelWidth * rowPerArray
           );
 
           const boxBot = new MathLine(
@@ -565,7 +618,7 @@ const calculatePitchedRoofPanel = (
             leftRefCorToNorth = Coordinate.destination(
               leftRefCor,
               -rotationAngle,
-              panelWidth * rowPerArray * panelCos
+              flatPanelWidth * rowPerArray
             );
           }
           if (rightCors.length !== 0) {
@@ -573,7 +626,7 @@ const calculatePitchedRoofPanel = (
             rightRefCorToNorth = Coordinate.destination(
               rightRefCor,
               -rotationAngle,
-              panelWidth * rowPerArray * panelCos
+              flatPanelWidth * rowPerArray
             );
           }
           if (leftCors.length > 0 || rightCors.length > 0) {
@@ -632,35 +685,14 @@ const calculatePitchedRoofPanel = (
             possibleBoxLineCollection.mathLineCollection[1].originCor
           );
           // colSpaceCheck - 检查该列空间是否够放一组阵列
-          const colSpaceCalibrateCorStart =
-            possibleBoxLineCollection.mathLineCollection[0].originCor;
-          colSpaceCalibrateCorStart.setCoordinate(
-            null, null, Coordinate.heightOfArbitraryNode(
-              pitchedRoofPolygon, colSpaceCalibrateCorStart
-            )
-          );
-          const colSpaceCalibrateCor = Coordinate.destination(
-            possibleBoxLineCollection.mathLineCollection[0].originCor,
-            -rotationAngle + 90, panelLength * panelsPerRow
-          );
-          colSpaceCalibrateCor.setCoordinate(
-            null, null, Coordinate.heightOfArbitraryNode(
-              pitchedRoofPolygon, colSpaceCalibrateCor
-            )
-          );
-          const colSpaceCalibrateRatio =
-            Coordinate.linearDistance(
-              colSpaceCalibrateCorStart, colSpaceCalibrateCor
-            ) / (panelLength * panelsPerRow);
-          const colSpaceCheck = maxHorizenDist -
-            (panelLength * panelsPerRow * colSpaceCalibrateRatio);
+          const colSpaceCheck = maxHorizenDist - (flatPanelLength * panelsPerRow);
           // cols - 该列能摆板的阵列数
           let cols = 0;
           if (colSpaceCheck >= 0) {
-            cols = parseInt(colSpaceCheck / (
-              (panelLength * panelsPerRow + lengthOffset) *
-              colSpaceCalibrateRatio
-            ), 10) + 1;
+            cols = parseInt(
+              colSpaceCheck /
+              (flatPanelLength * panelsPerRow + flatLengthOffset), 10
+            ) + 1;
           }
 
           let startingGap = null;
@@ -668,26 +700,20 @@ const calculatePitchedRoofPanel = (
             startingGap = 0;
           } else if (align === 'center') {
             startingGap = (
-              maxHorizenDist -
-              (panelLength * panelsPerRow * colSpaceCalibrateRatio) -
-              (cols - 1) * (
-                (panelLength * panelsPerRow + lengthOffset) *
-                colSpaceCalibrateRatio
-              )
+              maxHorizenDist - (flatPanelLength * panelsPerRow) -
+              (cols - 1) * (flatPanelLength * panelsPerRow + flatLengthOffset)
             ) / 2;
           } else {
             startingGap = (
-              maxHorizenDist -
-              (panelLength * panelsPerRow * colSpaceCalibrateRatio) -
-              (cols - 1) * (
-                (panelLength * panelsPerRow + lengthOffset) *
-                colSpaceCalibrateRatio
-              )
+              maxHorizenDist - (flatPanelLength * panelsPerRow) -
+              (cols - 1) * (flatPanelLength * panelsPerRow + flatLengthOffset)
             );
           }
 
           for (let c = 0; c < cols; c++) {
             const panelArray = [];
+            const rowHeightCalibrateWest = [];
+            const rowHeightCalibrateEast = [];
             for (let r = 0; r < rowPerArray; r++) {
               for (let p = 0; p < panelsPerRow; p++) {
                 totalPossiblePanels += 1;
@@ -695,68 +721,52 @@ const calculatePitchedRoofPanel = (
                   Coordinate.destination(
                     possibleBoxLineCollection.mathLineCollection[0].originCor,
                     -rotationAngle + 90,
-                    c *
-                    ((panelLength * panelsPerRow + lengthOffset) * colSpaceCalibrateRatio) +
-                    (panelLength * p * colSpaceCalibrateRatio) + startingGap
+                    c * (flatPanelLength * panelsPerRow + flatLengthOffset) +
+                    (flatPanelLength * p) + startingGap
                   ),
                   -rotationAngle,
-                  panelWidth * r * panelCos
+                  flatPanelWidth * r
                 );
                 PVWestCor.setCoordinate(
                   null, null,
-                  Coordinate.heightOfArbitraryNode(
-                    pitchedRoofPolygon, PVWestCor
-                  ) + height + panelSin * panelWidth * r
+                  r === 0
+                    ? Coordinate.heightOfArbitraryNode(
+                      pitchedRoofPolygon, PVWestCor
+                    ) + height
+                    : rowHeightCalibrateWest[p] + flatPanelWidth * r * panelTan
                 );
-                const lengthCalibrateCor = Coordinate.destination(
-                  PVWestCor, -rotationAngle + 90, panelLength
-                );
-                lengthCalibrateCor.setCoordinate(
-                  null, null, Coordinate.heightOfArbitraryNode(
-                    pitchedRoofPolygon, lengthCalibrateCor
-                  ) + height + panelSin * panelWidth * r
-                );
-                const lengthCalibrateRatio =
-                  Coordinate.linearDistance(PVWestCor, lengthCalibrateCor) /
-                  panelLength;
+                if (r === 0) rowHeightCalibrateWest.push(PVWestCor.height);
                 const PVEastCor = Coordinate.destination(
                   PVWestCor, -rotationAngle + 90,
-                  panelLength / lengthCalibrateRatio
+                  flatPanelLength
                 );
                 PVEastCor.setCoordinate(
-                  null, null, Coordinate.heightOfArbitraryNode(
-                    pitchedRoofPolygon, PVEastCor
-                  ) + height + panelSin * panelWidth * r
+                  null, null,
+                  r === 0
+                    ? Coordinate.heightOfArbitraryNode(
+                      pitchedRoofPolygon, PVEastCor
+                    ) + height
+                    : rowHeightCalibrateEast[p] + flatPanelWidth * r * panelTan
                 );
-                const widthCalibrateCor = Coordinate.destination(
-                  PVWestCor, -rotationAngle, panelWidth * panelCos
-                );
-                widthCalibrateCor.setCoordinate(
-                  null, null, Coordinate.heightOfArbitraryNode(
-                    pitchedRoofPolygon, widthCalibrateCor
-                  ) + height + panelSin * panelWidth * (r + 1)
-                );
-                const widthCalibrateRatio =
-                  Coordinate.linearDistance(PVWestCor, widthCalibrateCor) /
-                  panelWidth;
+                if (r === 0) rowHeightCalibrateEast.push(PVEastCor.height);
+                console.log(Coordinate.linearDistance(PVWestCor, PVEastCor))
                 const PVWestNorthCor = Coordinate.destination(
                   PVWestCor, -rotationAngle,
-                  panelWidth * panelCos / widthCalibrateRatio
+                  flatPanelWidth
                 );
                 PVWestNorthCor.setCoordinate(
-                  null, null, Coordinate.heightOfArbitraryNode(
-                    pitchedRoofPolygon, PVWestNorthCor
-                  ) + height + panelSin * panelWidth * (r + 1)
+                  null, null,
+                  PVWestCor.height + flatPanelWidth * panelTan
                 );
                 const PVEastNorthCor = Coordinate.destination(
                   PVEastCor, -rotationAngle,
-                  panelWidth * panelCos / widthCalibrateRatio
+                  flatPanelWidth
                 );
                 PVEastNorthCor.setCoordinate(
-                  null, null, Coordinate.heightOfArbitraryNode(
-                    pitchedRoofPolygon, PVEastNorthCor
-                  ) + height + panelSin * panelWidth * (r + 1)
+                  null, null,
+                  PVEastCor.height + flatPanelWidth * panelTan
                 );
+                console.log(Coordinate.linearDistance(PVWestNorthCor, PVWestCor))
                 const pvPolyline = new Polyline([
                   Point.fromCoordinate(PVWestCor, 0.01),
                   Point.fromCoordinate(PVEastCor, 0.01),

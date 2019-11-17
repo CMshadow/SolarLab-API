@@ -52,11 +52,30 @@ const plus = (v1, v2) => {
   return [v1[0] + v2[0], v1[1] + v2[1], v1[2] + v2[2]];
 };
 
+const mapBrng = (brng) => {
+  const newBrng = brng % 360;
+  if (newBrng < 0) {
+    return 360 + newBrng;
+  } else {
+    return newBrng;
+  }
+};
+
+const angleBetweenBrngs = (brng1, brng2) => {
+  const newBrng1 = mapBrng(brng1);
+  const newBrng2 = mapBrng(brng2);
+  return Math.min(
+    360 - Math.abs(newBrng1 - newBrng2), Math.abs(newBrng1 - newBrng2)
+  );
+};
+
 module.exports = {
   coordinateToVector,
   vectorToCoordinate,
   greatCircle,
   cross,
   dot,
-  plus
+  plus,
+  mapBrng,
+  angleBetweenBrngs
 };

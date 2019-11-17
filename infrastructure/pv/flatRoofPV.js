@@ -81,7 +81,7 @@ const calculateFlatRoofPanel = (
     panelWidth * rowPerArray * panelCos / rotationCos
   );
   if (rotationAngle === 90 || rotationAngle === -90) {
-    edgeLengthCorrespondingPanelWidth = Math.abs(panelWidth * panelCos);
+    edgeLengthCorrespondingPanelWidth = Math.abs(panelWidth * rowPerArray * panelCos);
   }
   // 板间距斜摆之后实际对应外切矩形宽度
   let edgeLengthCorrespondingWidthOffset = Math.abs(widthOffset / rotationCos);

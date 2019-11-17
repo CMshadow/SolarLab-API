@@ -56,18 +56,18 @@ exports.lambdaHandler = async (event, context) => {
     })
   };
 };
-// 
+
 // const testdata = {
 //   "data": [
 //     [
 //       {
 //         "points": [
 //           {
-//             "lon": -117.840000372847,
-//             "lat": 33.646177611086,
+//             "lon": -117.841111544839,
+//             "lat": 33.646883309727,
 //             "height": 0,
 //             "heightOffset": 0,
-//             "entityId": "d05a7d10-0646-11ea-9ca5-37051960dd87",
+//             "entityId": "8bf147c5-08e5-11ea-a899-25a0c1dbcead",
 //             "name": "vertex",
 //             "color": {
 //               "red": 1,
@@ -80,11 +80,11 @@ exports.lambdaHandler = async (event, context) => {
 //             "render": true
 //           },
 //           {
-//             "lon": -117.840069422159,
-//             "lat": 33.646221712615,
+//             "lon": -117.841128771796,
+//             "lat": 33.646988197568,
 //             "height": 0,
 //             "heightOffset": 0,
-//             "entityId": "d05a7d11-0646-11ea-9ca5-37051960dd87",
+//             "entityId": "8bf147c6-08e5-11ea-a899-25a0c1dbcead",
 //             "name": "vertex",
 //             "color": {
 //               "red": 1,
@@ -97,11 +97,11 @@ exports.lambdaHandler = async (event, context) => {
 //             "render": true
 //           },
 //           {
-//             "lon": -117.840123940553,
-//             "lat": 33.646163804267,
+//             "lon": -117.841244553402,
+//             "lat": 33.647060149884,
 //             "height": 0,
 //             "heightOffset": 0,
-//             "entityId": "d05a7d12-0646-11ea-9ca5-37051960dd87",
+//             "entityId": "8bf147c7-08e5-11ea-a899-25a0c1dbcead",
 //             "name": "vertex",
 //             "color": {
 //               "red": 1,
@@ -114,11 +114,28 @@ exports.lambdaHandler = async (event, context) => {
 //             "render": true
 //           },
 //           {
-//             "lon": -117.840000372847,
-//             "lat": 33.646177611086,
+//             "lon": -117.841370181174,
+//             "lat": 33.647044039235,
 //             "height": 0,
 //             "heightOffset": 0,
-//             "entityId": "d05a7d10-0646-11ea-9ca5-37051960dd87",
+//             "entityId": "8bf147c8-08e5-11ea-a899-25a0c1dbcead",
+//             "name": "vertex",
+//             "color": {
+//               "red": 1,
+//               "green": 1,
+//               "blue": 1,
+//               "alpha": 1
+//             },
+//             "pixelSize": 15,
+//             "show": true,
+//             "render": true
+//           },
+//           {
+//             "lon": -117.841111544839,
+//             "lat": 33.646883309727,
+//             "height": 0,
+//             "heightOffset": 0,
+//             "entityId": "8bf147c5-08e5-11ea-a899-25a0c1dbcead",
 //             "name": "vertex",
 //             "color": {
 //               "red": 1,
@@ -131,7 +148,7 @@ exports.lambdaHandler = async (event, context) => {
 //             "render": true
 //           }
 //         ],
-//         "entityId": "d05a7d13-0646-11ea-9ca5-37051960dd87",
+//         "entityId": "8bf147c9-08e5-11ea-a899-25a0c1dbcead",
 //         "name": "polyline",
 //         "color": {
 //           "red": 1,
@@ -145,30 +162,33 @@ exports.lambdaHandler = async (event, context) => {
 //       []
 //     ]
 //   ],
-//   "azimuth": 180,
+//   "azimuth": 90,
 //   "tilt": 10,
 //   "panelWidth": 1.602,
 //   "panelLength": 1.061,
-//   "rowSpace": 0.5,
-//   "colSpace": 0,
+//   "rowSpace": 2.1,
+//   "colSpace": 1,
 //   "align": "center",
 //   "height": 5,
 //   "initArraySequenceNum": 1,
-//   "rowPerArray": 1,
-//   "panelsPerRow": 1,
+//   "rowPerArray": 2,
+//   "panelsPerRow": 3,
 //   "pitchedRoofPolygon": {
-//     "entityId": "c94bd912-0646-11ea-9ca5-37051960dd87",
+//     "entityId": "3759bb02-08e2-11ea-a899-25a0c1dbcead",
 //     "name": "roofPlane",
 //     "height": 0,
 //     "hierarchy": [
-//       -117.839973176427,
-//       33.646171575967,
+//       -117.841097349062,
+//       33.646863264877,
 //       4.995,
-//       -117.840071329328,
-//       33.646234265852,
+//       -117.84111868157,
+//       33.646993149747,
 //       6.995,
-//       -117.840148826625,
-//       33.646151949754,
+//       -117.841241720996,
+//       33.647069612413,
+//       6.995,
+//       -117.841397288443,
+//       33.647049662249,
 //       4.995
 //     ],
 //     "perPositionHeight": true,
@@ -188,48 +208,78 @@ exports.lambdaHandler = async (event, context) => {
 //     "outlineWidth": 2,
 //     "shadow": 1,
 //     "show": true,
-//     "brng": 172.35550719925175,
-//     "obliquity": 13.84096043280212,
+//     "brng": 216.74200617140025,
+//     "obliquity": 10.89363137036721,
 //     "highestNode": [
-//       -117.840071329328,
-//       33.646234265852,
+//       -117.84111868157,
+//       33.646993149747,
 //       7
 //     ],
 //     "lowestNode": [
-//       -117.839973176427,
-//       33.646171575967,
+//       -117.841097349062,
+//       33.646863264877,
 //       5
 //     ],
 //     "edgesCollection": [
 //       {
 //         "startNode": 2,
-//         "endNode": 4,
+//         "endNode": 5,
 //         "clockWise": 1,
 //         "counterWise": 1,
 //         "type": "Hip",
 //         "startNodePara": {
-//           "id": "c3f608a2-0646-11ea-9ca5-37051960dd87",
-//           "lon": -117.839973176427,
-//           "lat": 33.646171575967,
+//           "id": "34dcad12-08e2-11ea-a899-25a0c1dbcead",
+//           "lon": -117.841097349062,
+//           "lat": 33.646863264877,
 //           "height": 5,
 //           "bound": 0,
 //           "children": [
 //             1,
 //             3,
-//             4
+//             5
 //           ]
 //         },
 //         "endNodePara": {
-//           "id": "c3f656c0-0646-11ea-9ca5-37051960dd87",
-//           "lon": -117.840071329328,
-//           "lat": 33.646234265852,
+//           "id": "34dcad15-08e2-11ea-a899-25a0c1dbcead",
+//           "lon": -117.84111868157,
+//           "lat": 33.646993149747,
+//           "height": 7,
+//           "bound": 1,
+//           "children": [
+//             2,
+//             3,
+//             4
+//           ]
+//         }
+//       },
+//       {
+//         "startNode": 4,
+//         "endNode": 5,
+//         "clockWise": 1,
+//         "counterWise": 1,
+//         "type": "Ridge",
+//         "startNodePara": {
+//           "id": "34dcad14-08e2-11ea-a899-25a0c1dbcead",
+//           "lon": -117.841241720996,
+//           "lat": 33.647069612413,
 //           "height": 7,
 //           "bound": 1,
 //           "children": [
 //             0,
 //             1,
+//             5
+//           ]
+//         },
+//         "endNodePara": {
+//           "id": "34dcad15-08e2-11ea-a899-25a0c1dbcead",
+//           "lon": -117.84111868157,
+//           "lat": 33.646993149747,
+//           "height": 7,
+//           "bound": 1,
+//           "children": [
 //             2,
-//             3
+//             3,
+//             4
 //           ]
 //         }
 //       },
@@ -240,9 +290,9 @@ exports.lambdaHandler = async (event, context) => {
 //         "counterWise": 1,
 //         "type": "Hip",
 //         "startNodePara": {
-//           "id": "c3f608a1-0646-11ea-9ca5-37051960dd87",
-//           "lon": -117.840148826625,
-//           "lat": 33.646151949754,
+//           "id": "34dcad11-08e2-11ea-a899-25a0c1dbcead",
+//           "lon": -117.841397288443,
+//           "lat": 33.647049662249,
 //           "height": 5,
 //           "bound": 0,
 //           "children": [
@@ -252,16 +302,15 @@ exports.lambdaHandler = async (event, context) => {
 //           ]
 //         },
 //         "endNodePara": {
-//           "id": "c3f656c0-0646-11ea-9ca5-37051960dd87",
-//           "lon": -117.840071329328,
-//           "lat": 33.646234265852,
+//           "id": "34dcad14-08e2-11ea-a899-25a0c1dbcead",
+//           "lon": -117.841241720996,
+//           "lat": 33.647069612413,
 //           "height": 7,
 //           "bound": 1,
 //           "children": [
 //             0,
 //             1,
-//             2,
-//             3
+//             5
 //           ]
 //         }
 //       },
@@ -272,9 +321,9 @@ exports.lambdaHandler = async (event, context) => {
 //         "counterWise": 0,
 //         "type": "OuterEdge",
 //         "startNodePara": {
-//           "id": "c3f608a1-0646-11ea-9ca5-37051960dd87",
-//           "lon": -117.840148826625,
-//           "lat": 33.646151949754,
+//           "id": "34dcad11-08e2-11ea-a899-25a0c1dbcead",
+//           "lon": -117.841397288443,
+//           "lat": 33.647049662249,
 //           "height": 5,
 //           "bound": 0,
 //           "children": [
@@ -284,20 +333,19 @@ exports.lambdaHandler = async (event, context) => {
 //           ]
 //         },
 //         "endNodePara": {
-//           "id": "c3f608a2-0646-11ea-9ca5-37051960dd87",
-//           "lon": -117.839973176427,
-//           "lat": 33.646171575967,
+//           "id": "34dcad12-08e2-11ea-a899-25a0c1dbcead",
+//           "lon": -117.841097349062,
+//           "lat": 33.646863264877,
 //           "height": 5,
 //           "bound": 0,
 //           "children": [
 //             1,
 //             3,
-//             4
+//             5
 //           ]
 //         }
 //       }
 //     ]
 //   }
 // }
-//
 // console.log(lambdaHandler(testdata))

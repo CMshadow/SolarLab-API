@@ -3,58 +3,86 @@ Transform: AWS::Serverless-2016-10-31
 
 Resources:
   SetbackPolylineFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: setbackPolylineCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   SetbackPolylinePitchedRoofFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: setbackPolylinePitchedRoofCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   PassagePolylineFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: passageSetbackCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   FlatRoofPVCalculationFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: flatRoofPVCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   PitchedRoofPVCalculationFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: pitchedRoofPVCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   createPanelFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: createPanelAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   getPanelFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: getPanelAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   createInverterFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: createInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
+  findClosestUSWeatherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: findClosesUSWeatherAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 30
+  fetchUSGlobalOptimalFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: fetchUSGlobalOptimalAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 30
+  calculateOptimalTiltFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: calculateOptimalTiltAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 60
+  calculateOptimalTiltAzimuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: calculateOptimalTiltAzimuthAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 120

@@ -1,5 +1,12 @@
 # SolarLab-API
-SolarLab APIs on AWS Lambda
+SolarLab APIs on AWS Lambda, Nodejs codes
+
+## Test Application Locally
+- `event.json` : Test event JSON file
+- `<functionName>` : The function name defined in template.yaml
+```shell
+$ sam local invoke <functionName> --event event.json
+```
 
 ## Package SAM template
 

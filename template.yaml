@@ -85,4 +85,4 @@ Resources:
       CodeUri: ./
       Handler: calculateOptimalTiltAzimuthAPP.lambdaHandler
       Runtime: nodejs10.x
-      Timeout: 120
+      Timeout: 60

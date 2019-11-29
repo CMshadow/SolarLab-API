@@ -71,11 +71,11 @@ const calculatePitchedRoofPanel = (
   const south = boundingWENS[3];
 
   // 太阳能板起伏角度的cos
-  const panelCos = Math.cos((panelTiltAngle + obliquity) * Math.PI / 180.0);
+  const panelCos = Math.cos((panelTiltAngle) * Math.PI / 180.0);
   // 太阳能板起伏角度的sin
-  const panelSin = Math.sin((panelTiltAngle + obliquity) * Math.PI / 180.0);
+  const panelSin = Math.sin((panelTiltAngle) * Math.PI / 180.0);
   // 太阳能板起伏角度的tan
-  const panelTan = Math.tan((panelTiltAngle + obliquity) * Math.PI / 180.0);
+  const panelTan = Math.tan((panelTiltAngle) * Math.PI / 180.0);
   // 太阳能板旋转角度cos
   const rotationCos = Math.abs(Math.cos(angleDiff * Math.PI / 180.0));
   // 屋顶鞋面倾角cos
@@ -749,7 +749,7 @@ const calculatePitchedRoofPanel = (
                     : rowHeightCalibrateEast[p] + flatPanelWidth * r * panelTan
                 );
                 if (r === 0) rowHeightCalibrateEast.push(PVEastCor.height);
-                console.log(Coordinate.linearDistance(PVWestCor, PVEastCor))
+                // console.log(Coordinate.linearDistance(PVWestCor, PVEastCor))
                 const PVWestNorthCor = Coordinate.destination(
                   PVWestCor, -rotationAngle,
                   flatPanelWidth
@@ -766,7 +766,7 @@ const calculatePitchedRoofPanel = (
                   null, null,
                   PVEastCor.height + flatPanelWidth * panelTan
                 );
-                console.log(Coordinate.linearDistance(PVWestNorthCor, PVWestCor))
+                // console.log(Coordinate.linearDistance(PVWestNorthCor, PVWestCor))
                 const pvPolyline = new Polyline([
                   Point.fromCoordinate(PVWestCor, 0.01),
                   Point.fromCoordinate(PVEastCor, 0.01),

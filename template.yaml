@@ -58,6 +58,13 @@ Resources:
       Handler: createInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
+  getInverterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: getInverterAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15
   findClosestUSWeatherFunction:
     Type: AWS::Serverless::Function
     Properties:

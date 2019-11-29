@@ -10,6 +10,7 @@ exports.lambdaHandler = async (event, context, callback) => {
   const updatedAt = event.updatedAt;
   const aisc = event.aisc;
   const bvoco = event.bvoco;
+  const bvmpo = bvoco / 0.97;
   const cost = event.cost;
   const description = event.description;
   const impo = event.impo;
@@ -33,6 +34,7 @@ exports.lambdaHandler = async (event, context, callback) => {
       updatedAt: { S: updatedAt },
       aisc: { N: aisc },
       bvoco: { N: bvoco },
+      bvmpo: { N: bvmpo },
       cost: { N: cost },
       description: { S: description },
       impo: { N: impo },

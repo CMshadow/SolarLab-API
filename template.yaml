@@ -93,3 +93,10 @@ Resources:
       Handler: calculateOptimalTiltAzimuthAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 60
+  calculateAutoInverterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: calculateAutoInverterAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15

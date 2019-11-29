@@ -1,5 +1,3 @@
-const Inverter = require('../inverter/inverter');
-
 const calculateWiringRestriction = (
   VdcMax, VdcMin, IdcMax, Paco, VMpptLow, VMpptHigh,
   Voco, Bvoco, Bvmpo, Vmpo, Impo, Isco
@@ -161,46 +159,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
   };
 };
 
-exports.handler = async(event, context, callback) => {
-  const PVParams = event.PVParams;
-  const userID = event.userID
-  var inverters_parameters = JSON.parse(event["body"])['inverters_parameters']
-  var pVpanels_collection = JSON.parse(event["body"])['pVpanels_collection']
-  console.log(inverters_parameters)
-
-  var possible_solutions = [];
-
-  console.log("Scan succeeded.");
-  for(var i = 0; i < inverters_parameters.length; i++){
-      var selected_inverter = inverters_parameters[i]
-      var inverterName = inverters_parameters[i]["model"];
-      var I_max = inverters_parameters[i]["idcmax"];
-      var P_standard = inverters_parameters[i]["paco"];
-      var V_max = inverters_parameters[i]["mpptHigh"];
-      var V_min = inverters_parameters[i]["mpptLow"];
-      if(parseFloat(P_standard)/(PVParams["model_full_info"]["impo"]*PVParams["model_full_info"]["vmpo"]) >= 2){
-          var restricts_json = calculateWiringRestriction(PVParams["model_full_info"]["voco"], PVParams["model_full_info"]["isco"], PVParams["model_full_info"]["impo"]*PVParams["model_full_info"]["vmpo"], V_min, V_max, I_max, P_standard);
-          var one_solution = wiring_calculation(PVParams, pVpanels_collection, restricts_json, inverterName, selected_inverter)
-
-          if(one_solution !== undefined){
-              possible_solutions.push(one_solution)
-          }
-      }
-  }
-
-
-  possible_solutions.sort(function(a, b) {
-    return a.wasted - b.wasted  ||  a.solution.length - b.solution.length;
-  });
-  console.log('Final result')
-  console.log(possible_solutions[0])
-
-  var response = {
-      "statusCode": 200,
-      "headers":{
-          "Access-Control-Allow-Origin": "*"
-      },
-      "body": JSON.stringify(possible_solutions[0]),
-  };
-  callback(null, response);
+module.exports = {
+  calculateWiringRestriction,
+  calculateWiring
 };

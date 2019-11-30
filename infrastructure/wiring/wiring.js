@@ -13,12 +13,15 @@ const calculateWiringRestriction = (
   const maxPanelPerString = Math.min(
     Math.floor(VdcMax / Voco / (1 + (t - 25) * Kv)),
     Math.floor(
-      VMpptHigh / Vmpo / (1 + (t - 25) * KvPrime)
+      VMpptHigh / Vmpo / (1 + ((t - 25) * KvPrime))
     )
   );
+
   const minPanelPerString = Math.ceil(
     VMpptLow / Vmpo / (1 + (tPrime - 25) * KvPrime)
   );
+
+  if (maxPanelPerString < minPanelPerString) return [];
 
   const potentialPPSArray = Array.from(
     Array(maxPanelPerString - minPanelPerString + 1),

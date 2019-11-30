@@ -4,6 +4,7 @@ const lambda = new AWS.Lambda();
 
 exports.lambdaHandler = async (event) => {
   const panelID = event.panelID;
+  const inverterID = event.inverterID;
   const userID = event.userID;
   const totalPanels = event.totalPanels;
   const PVParams = JSON.parse(event.PVParams);
@@ -40,32 +41,23 @@ exports.lambdaHandler = async (event) => {
     return val.panelID === panelID ? val : match;
   }, allPanels[0]);
 
-  const allResult = allInverters.map(inverter => {
-    const possiblePlans = Wiring.calculateWiringRestriction(
-      Number(inverter.vdcmax), Number(inverter.vdcmin), Number(inverter.idcmax),
-      Number(inverter.paco), Number(inverter.mpptLow), Number(inverter.mpptHigh),
-      Number(panelInfo.voco), Number(panelInfo.bvoco), Number(panelInfo.bvmpo),
-      Number(panelInfo.vmpo), Number(panelInfo.impo), Number(panelInfo.isco)
-    );
-    return {
-      ...Wiring.calculateWiring(PVParams, totalPanels, possiblePlans),
-      inverterID: inverter.inverterID
-    };
-  });
-  const validResult = allResult.filter(p =>
-    p.inverterSetUp !== undefined &&
-    p.wasted !== undefined &&
-    p.inverterSetUp.length !== 0
+  const inverterInfo = allInverters.reduce((match, val) => {
+    return val.inverterID === inverterID ? val : match;
+  }, allPanels[0]);
+  const possiblePlan = Wiring.calculateWiringRestriction(
+    Number(inverterInfo.vdcmax), Number(inverterInfo.vdcmin),
+    Number(inverterInfo.idcmax), Number(inverterInfo.paco),
+    Number(inverterInfo.mpptLow), Number(inverterInfo.mpptHigh),
+    Number(panelInfo.voco), Number(panelInfo.bvoco), Number(panelInfo.bvmpo),
+    Number(panelInfo.vmpo), Number(panelInfo.impo), Number(panelInfo.isco)
   );
-  validResult.sort((first, second) => {
-    if (first.wasted > second.wasted) return 1;
-    if (first.wasted < second.wasted) return -1;
-    if (first.inverterSetUp.length > second.inverterSetUp.length) return 1;
-    if (first.inverterSetUp.length < second.inverterSetUp.length) return -1;
-  });
-  if (validResult.length === 0) {
-    throw new Error('Error: No matching Inverters');
+  const result = Wiring.calculateWiring(PVParams, totalPanels, possiblePlan);
+  if (result === null) {
+    throw new Error('Error: The Inverter does not fit');
   } else {
-    return validResult[0];
+    return {
+      ...result,
+      inverterID: inverterInfo.inverterID
+    };
   }
 };

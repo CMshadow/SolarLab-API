@@ -100,3 +100,10 @@ Resources:
       Handler: calculateAutoInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
+  calculateManualInverterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: calculateManualInverterAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 15

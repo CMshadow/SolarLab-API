@@ -19,6 +19,7 @@ exports.lambdaHandler = async (event, context, callback) => {
   const pso = event.pso;
   const vac = event.vac;
   const vdcmax = event.vdcmax;
+  const vdcmin = event.vdcmin;
   const vdco = event.vdco;
   const vs0 = event.vs0;
 
@@ -40,6 +41,7 @@ exports.lambdaHandler = async (event, context, callback) => {
       pso: { N: pso },
       vac: { N: vac },
       vdcmax: { N: vdcmax },
+      vdcmin: { N: vdcmin },
       vdco: { N: vdco },
       vs0: { N: vs0 }
     },

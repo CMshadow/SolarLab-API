@@ -7,7 +7,7 @@ exports.lambdaHandler = async (event) => {
   const inverterID = event.inverterID;
   const userID = event.userID;
   const totalPanels = event.totalPanels;
-  const PVParams = JSON.parse(event.PVParams);
+  const PVParams = event.PVParams;
 
   const panelLambdaParams = {
     FunctionName: 'solarlab-api-getPanelFunction-1J5QDXOK53RUW',
@@ -52,12 +52,12 @@ exports.lambdaHandler = async (event) => {
     Number(panelInfo.vmpo), Number(panelInfo.impo), Number(panelInfo.isco)
   );
   const result = Wiring.calculateWiring(PVParams, totalPanels, possiblePlan);
-  if (result === null) {
+  if (result === null || result.inverterSetUp.length === 0) {
     throw new Error('Error: The Inverter does not fit');
   } else {
-    return {
+    return JSON.stringify({
       ...result,
       inverterID: inverterInfo.inverterID
-    };
+    });
   }
 };

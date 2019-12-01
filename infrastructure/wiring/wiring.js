@@ -60,17 +60,6 @@ const calculateWiringRestriction = (
 };
 
 const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
-  // // 数板数
-  // const totalPanels = Object.keys(PVcollection).reduce((acc, k) => {
-  //   const totalPanelsOnRoof = PVcollection[k].reduce((acc2, partial) => {
-  //     const totalPanelOnPartial = partial.reduce((acc3, array) => {
-  //       return acc3 + array.length;
-  //     }, 0);
-  //     return acc2 + totalPanelOnPartial;
-  //   }, 0);
-  //   return acc + totalPanelsOnRoof;
-  // }, 0);
-
   let filteredPlan = [];
   if (PVparams.mode === 'array') {
     for (const plan of wiringRestriction) {

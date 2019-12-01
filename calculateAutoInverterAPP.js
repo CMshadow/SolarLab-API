@@ -6,7 +6,7 @@ exports.lambdaHandler = async (event) => {
   const panelID = event.panelID;
   const userID = event.userID;
   const totalPanels = event.totalPanels;
-  const PVParams = JSON.parse(event.PVParams);
+  const PVParams = event.PVParams;
 
   const panelLambdaParams = {
     FunctionName: 'solarlab-api-getPanelFunction-1J5QDXOK53RUW',
@@ -66,6 +66,6 @@ exports.lambdaHandler = async (event) => {
   if (validResult.length === 0) {
     throw new Error('Error: No matching Inverters');
   } else {
-    return validResult[0];
+    return JSON.stringify(validResult[0]);
   }
 };

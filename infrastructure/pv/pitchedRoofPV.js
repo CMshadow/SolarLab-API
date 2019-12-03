@@ -72,8 +72,6 @@ const calculatePitchedRoofPanel = (
 
   // 太阳能板起伏角度的cos
   const panelCos = Math.cos((panelTiltAngle) * Math.PI / 180.0);
-  // 太阳能板起伏角度的sin
-  const panelSin = Math.sin((panelTiltAngle) * Math.PI / 180.0);
   // 太阳能板起伏角度的tan
   const panelTan = Math.tan((panelTiltAngle) * Math.PI / 180.0);
   // 太阳能板旋转角度cos
@@ -190,6 +188,11 @@ const calculatePitchedRoofPanel = (
   let maxPanelNum = 0;
   let drawingSequence = [];
   let endArraySequenceNum = initArraySequenceNum;
+
+  // 判断空间是否够放一块板
+  if (RoofFoundLine.polylineArea() < 2 * flatPanelWidth * flatPanelLength) {
+    return null;
+  }
 
   for (let planIndex = 0; planIndex < maximumPlansToTry; planIndex++) {
     // 阵列编码

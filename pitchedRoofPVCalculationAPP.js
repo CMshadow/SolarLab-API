@@ -42,8 +42,10 @@ exports.lambdaHandler = async (event, context) => {
         obliquity,
         pitchedRoofPolygon
       );
-      initArraySequenceNum = output[0];
-      panelLayout.push(output[1]);
+      if (output !== null) {
+        initArraySequenceNum = output[0];
+        panelLayout.push(output[1]);
+      }
     } catch (err) {
       console.log(err);
       throw new Error(`Error: ${err.toString()}`);

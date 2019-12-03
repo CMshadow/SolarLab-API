@@ -29,14 +29,14 @@ Resources:
       CodeUri: ./
       Handler: flatRoofPVCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
-      Timeout: 15
+      Timeout: 30
   PitchedRoofPVCalculationFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: pitchedRoofPVCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
-      Timeout: 15
+      Timeout: 30
   createPanelFunction:
     Type: AWS::Serverless::Function
     Properties:

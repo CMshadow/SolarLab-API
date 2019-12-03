@@ -132,6 +132,11 @@ const calculateFlatRoofPanel = (
   let drawingSequence = [];
   let endArraySequenceNum = initArraySequenceNum;
 
+  // 判断空间是否够放一块板
+  if (RoofFoundLine.polylineArea() < 2 * panelWidth * panelCos * panelLength) {
+    return null;
+  }
+
   for (let planIndex = 0; planIndex < maximumPlansToTry; planIndex++) {
     // 阵列编码
     let arraySequenceNum = initArraySequenceNum;

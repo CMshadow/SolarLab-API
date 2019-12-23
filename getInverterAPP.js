@@ -23,6 +23,7 @@ exports.lambdaHandler = async (event, context, callback) => {
   let response = null;
   await dynamodb.query(params, (err, data) => {
     if (err) {
+      console.log(err);
       throw new Error('Error: Database error');
     } else {
       if (data.Items.length === 0) {

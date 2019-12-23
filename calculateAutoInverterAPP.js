@@ -34,6 +34,9 @@ exports.lambdaHandler = async (event) => {
     if (err) throw err;
     else return data;
   }).promise();
+  if (inverterData.FunctionError) {
+    throw new Error('Error: Database error');
+  }
   const allInverters = JSON.parse(inverterData.Payload);
 
   const panelInfo = allPanels.reduce((match, val) => {
@@ -63,6 +66,7 @@ exports.lambdaHandler = async (event) => {
     if (first.inverterSetUp.length > second.inverterSetUp.length) return 1;
     if (first.inverterSetUp.length < second.inverterSetUp.length) return -1;
   });
+  console.log(validResult);
   if (validResult.length === 0) {
     throw new Error('Error: No matching Inverters');
   } else {

@@ -35,6 +35,9 @@ exports.lambdaHandler = async (event) => {
     if (err) throw err;
     else return data;
   }).promise();
+  if (inverterData.FunctionError) {
+    throw new Error('Error: Database error');
+  }
   const allInverters = JSON.parse(inverterData.Payload);
 
   const panelInfo = allPanels.reduce((match, val) => {

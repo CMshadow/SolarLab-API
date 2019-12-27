@@ -4,105 +4,105 @@ Resources:
   SetbackPolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/4203143614b7e15b126b593425c77518
       Handler: setbackPolylineCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   SetbackPolylinePitchedRoofFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: setbackPolylinePitchedRoofCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   PassagePolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: passageSetbackCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   FlatRoofPVCalculationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: flatRoofPVCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 30
   PitchedRoofPVCalculationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: pitchedRoofPVCalculationAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 30
   createPanelFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: createPanelAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   getPanelFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: getPanelAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   createInverterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: createInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   getInverterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: getInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   findClosestUSWeatherFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: findClosesUSWeatherAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 30
   fetchUSGlobalOptimalFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: fetchUSGlobalOptimalAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 30
   calculateOptimalTiltFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: calculateOptimalTiltAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 60
   calculateOptimalTiltAzimuthFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: calculateOptimalTiltAzimuthAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 60
   calculateAutoInverterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: calculateAutoInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
   calculateManualInverterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/adbc9a328de4c70bc59dc4a18f87e979
+      CodeUri: s3://solarlab-sam-lambda/796e378ad0c6f26276262eddc1da22a5
       Handler: calculateManualInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15

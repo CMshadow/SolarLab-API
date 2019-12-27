@@ -45,6 +45,8 @@ exports.lambdaHandler = async (event, context) => {
       if (output !== null) {
         initArraySequenceNum = output[0];
         panelLayout.push(output[1]);
+      } else {
+        throw new Error('Error: The space is too small');
       }
     } catch (err) {
       console.log(err);

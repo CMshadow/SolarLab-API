@@ -266,7 +266,9 @@ const calculatePitchedRoofPanel = (
 
     // 行数
     let rowNum = 0;
+    let whileLoopCount = 0;
     while (breakable !== 2) {
+      whileLoopCount += 1;
       // corNorthList - 北线交点坐标array
       const corNorthList = [];
       // 计算多边形每条线与北线的交点坐标，如果存在加入到corNorthList
@@ -379,6 +381,8 @@ const calculatePitchedRoofPanel = (
       if (corNorthList.length === 0 && breakable === 1) {
         breakable = 2;
       }
+      // whileLoop太长
+      if (whileLoopCount > 1000) break;
 
       // 如果corNorthList里面只有一个交点，则跳入下一行
       if (corNorthList.length === 1 || corSouthList.length === 1) {

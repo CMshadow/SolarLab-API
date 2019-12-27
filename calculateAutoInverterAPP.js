@@ -47,6 +47,8 @@ exports.lambdaHandler = async (event) => {
     const possiblePlans = Wiring.calculateWiringRestriction(
       Number(inverter.vdcmax), Number(inverter.vdcmin), Number(inverter.idcmax),
       Number(inverter.paco), Number(inverter.mpptLow), Number(inverter.mpptHigh),
+      Number(inverter.mpptNum), Number(inverter.stringNum),
+      Number(inverter.mpptIdcmax), Number(inverter.stringIdcmax),
       Number(panelInfo.voco), Number(panelInfo.bvoco), Number(panelInfo.bvmpo),
       Number(panelInfo.vmpo), Number(panelInfo.impo), Number(panelInfo.isco)
     );

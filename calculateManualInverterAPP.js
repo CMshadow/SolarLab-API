@@ -51,6 +51,8 @@ exports.lambdaHandler = async (event) => {
     Number(inverterInfo.vdcmax), Number(inverterInfo.vdcmin),
     Number(inverterInfo.idcmax), Number(inverterInfo.paco),
     Number(inverterInfo.mpptLow), Number(inverterInfo.mpptHigh),
+    Number(inverterInfo.mpptNum), Number(inverterInfo.stringNum),
+    Number(inverterInfo.mpptIdcmax), Number(inverterInfo.stringIdcmax),
     Number(panelInfo.voco), Number(panelInfo.bvoco), Number(panelInfo.bvmpo),
     Number(panelInfo.vmpo), Number(panelInfo.impo), Number(panelInfo.isco)
   );

@@ -1,5 +1,6 @@
 const calculateWiringRestriction = (
-  VdcMax, VdcMin, IdcMax, Paco, VMpptLow, VMpptHigh,
+  VdcMax, VdcMin, IdcMax, Paco, VMpptLow, VMpptHigh, MpptNum, StringNum,
+  MpptIdcmax, StringIdcmax,
   Voco, Bvoco, Bvmpo, Vmpo, Impo, Isco
 ) => {
   const t = -20;
@@ -42,16 +43,54 @@ const calculateWiringRestriction = (
       );
 
       potentialSPIArray.forEach(spi => {
-        if (spi * Isco <= IdcMax) {
-          if (
-            pps * spi >= minPanelPerInverter &&
-            pps * spi <= maxPanelPerInverter
-          ) {
-            inverterPlans.push({
-              panelPerString: pps,
-              stringPerInverter: spi
-            });
+        const mpptSetup = Array.from(
+          Array(MpptNum),
+          x => Array.from(Array(StringNum / MpptNum), y => 0)
+        );
+
+        let remainingString = spi;
+        let currentMpptIndex = 0;
+        while (remainingString > 0) {
+          if (currentMpptIndex >= MpptNum) {
+            break;
           }
+          const totalConnectedStringNum =
+            mpptSetup[currentMpptIndex].reduce((acc, val) => acc + val, 0);
+          // console.log(totalConnectedStringNum)
+          // console.log(totalConnectedStringNum * Isco)
+          if (totalConnectedStringNum * Isco <= MpptIdcmax) {
+            const minLoadPortIndex = mpptSetup[currentMpptIndex]
+              .reduce((minInd, val, i) =>
+                val < mpptSetup[currentMpptIndex][minInd] ? i : minInd
+              , 0);
+            if (
+              (mpptSetup[currentMpptIndex][minLoadPortIndex] + 1) * Isco <= StringIdcmax &&
+              (totalConnectedStringNum + 1) * Isco <= MpptIdcmax
+            ) {
+              mpptSetup[currentMpptIndex][minLoadPortIndex] += 1;
+              remainingString -= 1;
+            } else {
+              currentMpptIndex += 1;
+            }
+          } else {
+            currentMpptIndex += 1;
+          }
+        }
+
+        if (
+          pps * spi >= minPanelPerInverter &&
+          pps * spi <= maxPanelPerInverter &&
+          remainingString === 0
+        ) {
+          inverterPlans.push({
+            panelPerString: pps,
+            stringPerInverter: mpptSetup.reduce((acc, mppt) =>
+              acc + mppt.reduce((acc2, port) =>
+                acc2 + port
+              , 0)
+            , 0),
+            mpptSetup: mpptSetup
+          });
         }
       });
     }
@@ -155,3 +194,7 @@ module.exports = {
   calculateWiringRestriction,
   calculateWiring
 };
+// calculateWiringRestriction(
+//   600, 260, 70, 21000, 300, 550, 2, 8, 35, 15,
+//   57.4, -0.2009, -0.20711, 46.4, 4.31, 4.78
+// );

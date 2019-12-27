@@ -21,7 +21,10 @@ exports.lambdaHandler = async (event, context, callback) => {
   const vdcmax = event.vdcmax;
   const vdcmin = event.vdcmin;
   const vdco = event.vdco;
-  const vs0 = event.vs0;
+  const mpptNum = event.mpptNum;
+  const stringNum = event.stringNum;
+  const mpptIdcmax = event.mpptIdcmax;
+  const stringIdcmax = event.stringIdcmax;
 
   const params = {
     Item: {
@@ -43,7 +46,10 @@ exports.lambdaHandler = async (event, context, callback) => {
       vdcmax: { N: vdcmax },
       vdcmin: { N: vdcmin },
       vdco: { N: vdco },
-      vs0: { N: vs0 }
+      mpptNum: { N: mpptNum },
+      stringNum: { N: stringNum },
+      mpptIdcmax: { N: mpptIdcmax },
+      stringIdcmax: { N: stringIdcmax }
     },
     TableName: 'SolarLab-UsersInverter'
   };

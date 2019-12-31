@@ -107,3 +107,10 @@ Resources:
       Handler: calculateManualInverterAPP.lambdaHandler
       Runtime: nodejs10.x
       Timeout: 15
+  calculateAllRoofPOAFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: calculateAllRoofPOAAPP.lambdaHandler
+      Runtime: nodejs10.x
+      Timeout: 30

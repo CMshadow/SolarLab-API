@@ -194,7 +194,13 @@ module.exports = {
   calculateWiringRestriction,
   calculateWiring
 };
-// calculateWiringRestriction(
+// const res = calculateWiringRestriction(
 //   600, 260, 70, 21000, 300, 550, 2, 8, 35, 15,
 //   57.4, -0.2009, -0.20711, 46.4, 4.31, 4.78
 // );
+// const a = calculateWiring(
+//   {"azimuth":180,"tilt":10,"orientation":"portrait","rowSpace":0.5,"colSpace":0,"align":"center","mode":"individual","rowPerArray":2,"panelPerRow":11,"panelID":"016b9d51-5b40-41f3-a20e-1dd29fb93450","selectPanelIndex":0},
+//   1000,
+//   res
+// )
+// console.log(a)

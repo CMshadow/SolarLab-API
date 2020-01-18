@@ -1,3 +1,4 @@
+const turf = require('@turf/turf');
 const simplepolygon = require('simplepolygon');
 
 const Point = require('../point/point.js');
@@ -43,6 +44,13 @@ class FoundLine extends Polyline {
 
   makeSetbackPolylineInside (stbDist) {
     const originPolyline = this.makeSetbackPolyline(stbDist, 'inside');
+    if (
+      turf.lineIntersect(
+        this.makeGeoJSON(), originPolyline.polyline.makeGeoJSON()
+      ).features.length !== 0
+    ) {
+      return [null];
+    }
     if (originPolyline.polyline.isSelfIntersection()) {
       return originPolyline.polyline.splitInsideSetbackSelfIntersection(
         originPolyline.direction
@@ -179,3 +187,105 @@ class FoundLine extends Polyline {
 }
 
 module.exports = FoundLine;
+
+// const a = FoundLine.fromPolyline({
+//   "points": [
+//     {
+//       "lon": -117.841146229003,
+//       "lat": 33.647143325635,
+//       "height": 0.05,
+//       "heightOffset": 0,
+//       "entityId": "3d472d10-de9c-11e9-ab87-e957b5fd364c",
+//       "name": "vertex",
+//       "color": {
+//         "red": 1,
+//         "green": 1,
+//         "blue": 1,
+//         "alpha": 1
+//       },
+//       "pixelSize": 15,
+//       "show": true,
+//       "render": true
+//     },
+//     {
+//       "lon": -117.841146231146,
+//       "lat": 33.64692575905,
+//       "height": 0.05,
+//       "heightOffset": 0,
+//       "entityId": "3d965e80-de9c-11e9-ab87-e957b5fd364c",
+//       "name": "vertex",
+//       "color": {
+//         "red": 1,
+//         "green": 1,
+//         "blue": 1,
+//         "alpha": 1
+//       },
+//       "pixelSize": 15,
+//       "show": true,
+//       "render": true
+//     },
+//     {
+//       "lon": -117.840875769478,
+//       "lat": 33.646943032838,
+//       "height": 0.05,
+//       "heightOffset": 0,
+//       "entityId": "3dd87090-de9c-11e9-ab87-e957b5fd364c",
+//       "name": "vertex",
+//       "color": {
+//         "red": 1,
+//         "green": 1,
+//         "blue": 1,
+//         "alpha": 1
+//       },
+//       "pixelSize": 15,
+//       "show": true,
+//       "render": true
+//     },
+//     {
+//       "lon": -117.840881705082,
+//       "lat": 33.647126586837,
+//       "height": 0.05,
+//       "heightOffset": 0,
+//       "entityId": "3de086e0-de9c-11e9-ab87-e957b5fd364c",
+//       "name": "vertex",
+//       "color": {
+//         "red": 1,
+//         "green": 1,
+//         "blue": 1,
+//         "alpha": 1
+//       },
+//       "pixelSize": 15,
+//       "show": true,
+//       "render": true
+//     },
+//     {
+//       "lon": -117.841146229003,
+//       "lat": 33.647143325635,
+//       "height": 0.05,
+//       "heightOffset": 0,
+//       "entityId": "3d472d10-de9c-11e9-ab87-e957b5fd364c",
+//       "name": "vertex",
+//       "color": {
+//         "red": 1,
+//         "green": 1,
+//         "blue": 1,
+//         "alpha": 1
+//       },
+//       "pixelSize": 15,
+//       "show": true,
+//       "render": true
+//     }
+//   ],
+//   "entityId": "3e53bb10-de9c-11e9-ab87-e957b5fd364c",
+//   "name": "polyline",
+//   "color": {
+//     "red": 1,
+//     "green": 1,
+//     "blue": 1,
+//     "alpha": 1
+//   },
+//   "show": true,
+//   "width": 4
+// })
+// const b = a.makeSetbackPolylineInside(1)
+// console.log(b)

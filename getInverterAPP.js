@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
-AWS.config.update({ region: 'us-west-1' });
-const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
+AWS.config.update({region: 'us-west-1'});
+const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 exports.lambdaHandler = async (event, context, callback) => {
   console.log('==================EVENT===================');
@@ -13,8 +13,8 @@ exports.lambdaHandler = async (event, context, callback) => {
     TableName: 'SolarLab-UsersInverter',
     KeyConditionExpression: 'userID = :userID',
     ExpressionAttributeValues: {
-      ':userID': { S: userID }
-    }
+      ':userID': {S: userID},
+    },
   };
   if (event.attributes) {
     params.ProjectionExpression = event.attributes.join(', ');
@@ -29,8 +29,8 @@ exports.lambdaHandler = async (event, context, callback) => {
       if (data.Items.length === 0) {
         throw new Error('Error: User does not have any record');
       } else {
-        response = data.Items.map(panel => {
-          Object.keys(panel).forEach(k => {
+        response = data.Items.map((panel) => {
+          Object.keys(panel).forEach((k) => {
             panel[k] = Object.values(panel[k])[0];
           });
           return panel;

@@ -13,8 +13,8 @@ exports.lambdaHandler = async (event) => {
     FunctionName: 'solarlab-api-getPanelFunction-1J5QDXOK53RUW',
     LogType: 'Tail',
     Payload: JSON.stringify({
-      userID: userID
-    })
+      userID: userID,
+    }),
   };
 
   const panelData = await lambda.invoke(panelLambdaParams, (err, data) => {
@@ -27,11 +27,11 @@ exports.lambdaHandler = async (event) => {
     FunctionName: 'solarlab-api-getInverterFunction-JDZE9IXKHLK9',
     LogType: 'Tail',
     Payload: JSON.stringify({
-      userID: userID
-    })
+      userID: userID,
+    }),
   };
 
-  const inverterData = await lambda.invoke(inverterLambdaParams, (err, data) => {
+  const inverterData = await lambda.invoke(inverterLambdaParams, (err, data)=>{
     if (err) throw err;
     else return data;
   }).promise();
@@ -54,7 +54,7 @@ exports.lambdaHandler = async (event) => {
     Number(inverterInfo.mpptNum), Number(inverterInfo.stringNum),
     Number(inverterInfo.mpptIdcmax), Number(inverterInfo.stringIdcmax),
     Number(panelInfo.voco), Number(panelInfo.bvoco), Number(panelInfo.bvmpo),
-    Number(panelInfo.vmpo), Number(panelInfo.impo), Number(panelInfo.isco)
+    Number(panelInfo.vmpo), Number(panelInfo.impo), Number(panelInfo.isco),
   );
   const result = Wiring.calculateWiring(PVParams, totalPanels, possiblePlan);
   if (result === null || result.inverterSetUp.length === 0) {
@@ -62,7 +62,7 @@ exports.lambdaHandler = async (event) => {
   } else {
     return JSON.stringify({
       ...result,
-      inverterID: inverterInfo.inverterID
+      inverterID: inverterInfo.inverterID,
     });
   }
 };

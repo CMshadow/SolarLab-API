@@ -1,7 +1,7 @@
 const calculateWiringRestriction = (
   VdcMax, VdcMin, IdcMax, Paco, VMpptLow, VMpptHigh, MpptNum, StringNum,
   MpptIdcmax, StringIdcmax,
-  Voco, Bvoco, Bvmpo, Vmpo, Impo, Isco
+  Voco, Bvoco, Bvmpo, Vmpo, Impo, Isco,
 ) => {
   const t = -20;
   const tPrime = 40;
@@ -14,23 +14,23 @@ const calculateWiringRestriction = (
   const maxPanelPerString = Math.min(
     Math.floor(VdcMax / Voco / (1 + (t - 25) * Kv)),
     Math.floor(
-      VMpptHigh / Vmpo / (1 + ((t - 25) * KvPrime))
-    )
+      VMpptHigh / Vmpo / (1 + ((t - 25) * KvPrime)),
+    ),
   );
 
   const minPanelPerString = Math.ceil(
-    VMpptLow / Vmpo / (1 + (tPrime - 25) * KvPrime)
+    VMpptLow / Vmpo / (1 + (tPrime - 25) * KvPrime),
   );
 
   if (maxPanelPerString < minPanelPerString) return [];
 
   const potentialPPSArray = Array.from(
     Array(maxPanelPerString - minPanelPerString + 1),
-    (x, i) => i + minPanelPerString
+    (x, i) => i + minPanelPerString,
   );
 
   const inverterPlans = [];
-  potentialPPSArray.forEach(pps => {
+  potentialPPSArray.forEach((pps) => {
     const Umax = Voco * pps;
     const Umin = Vmpo * pps;
     if (Umax < VdcMax && Umin > VdcMin) {
@@ -39,13 +39,13 @@ const calculateWiringRestriction = (
 
       const potentialSPIArray = Array.from(
         Array(maxParallelString - minParallelString + 1),
-        (x, i) => i + minParallelString
+        (x, i) => i + minParallelString,
       );
 
-      potentialSPIArray.forEach(spi => {
+      potentialSPIArray.forEach((spi) => {
         const mpptSetup = Array.from(
           Array(MpptNum),
-          x => Array.from(Array(StringNum / MpptNum), y => 0)
+          (x) => Array.from(Array(StringNum / MpptNum), (y) => 0),
         );
 
         let remainingString = spi;
@@ -64,7 +64,8 @@ const calculateWiringRestriction = (
                 val < mpptSetup[currentMpptIndex][minInd] ? i : minInd
               , 0);
             if (
-              (mpptSetup[currentMpptIndex][minLoadPortIndex] + 1) * Isco <= StringIdcmax &&
+              (mpptSetup[currentMpptIndex][minLoadPortIndex] + 1) * Isco <=
+              StringIdcmax &&
               (totalConnectedStringNum + 1) * Isco <= MpptIdcmax
             ) {
               mpptSetup[currentMpptIndex][minLoadPortIndex] += 1;
@@ -89,7 +90,7 @@ const calculateWiringRestriction = (
                 acc2 + port
               , 0)
             , 0),
-            mpptSetup: mpptSetup
+            mpptSetup: mpptSetup,
           });
         }
       });
@@ -114,7 +115,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
 
   const sortedPlan = filteredPlan.sort((first, second) =>
     first.panelPerString * first.stringPerInverter >
-    second.panelPerString * second.stringPerInverter
+    second.panelPerString * second.stringPerInverter,
   );
 
   const DPtable = Array(sortedPlan.length).fill(0);
@@ -128,7 +129,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
       if (i === 0) {
         const numInverter = Math.floor(
           j /
-          (sortedPlan[i].panelPerString * sortedPlan[i].stringPerInverter)
+          (sortedPlan[i].panelPerString * sortedPlan[i].stringPerInverter),
         );
         const plan = [];
         for (let count = 0; count < numInverter; count++) {
@@ -139,7 +140,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
           wasted: j - (
             numInverter * sortedPlan[i].panelPerString *
             sortedPlan[i].stringPerInverter
-          )
+          ),
         };
       }
       if (i !== 0) {
@@ -155,28 +156,28 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
           ) {
             DPtable[i][j] = {
               plan: [...DPtable[i - 1][j].plan],
-              wasted: DPtable[i - 1][j].wasted
+              wasted: DPtable[i - 1][j].wasted,
             };
           } else {
             const newPlan = [
               ...DPtable[i][j - (
                 sortedPlan[i].panelPerString * sortedPlan[i].stringPerInverter
-              )].plan
+              )].plan,
             ];
             newPlan.push(sortedPlan[i]);
             let newWasted = j;
-            newPlan.forEach(plan => {
+            newPlan.forEach((plan) => {
               newWasted -= (plan.panelPerString * plan.stringPerInverter);
             });
             DPtable[i][j] = {
               plan: newPlan,
-              wasted: newWasted
+              wasted: newWasted,
             };
           }
         } else {
           DPtable[i][j] = {
             plan: [...DPtable[i - 1][j].plan],
-            wasted: DPtable[i - 1][j].wasted
+            wasted: DPtable[i - 1][j].wasted,
           };
         }
       }
@@ -186,13 +187,13 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
   const solution = DPtable[sortedPlan.length - 1][totalPanels];
   return {
     inverterSetUp: solution.plan,
-    wasted: solution.wasted
+    wasted: solution.wasted,
   };
 };
 
 module.exports = {
   calculateWiringRestriction,
-  calculateWiring
+  calculateWiring,
 };
 
 // const res = calculateWiringRestriction(

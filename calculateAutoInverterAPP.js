@@ -12,8 +12,8 @@ exports.lambdaHandler = async (event) => {
     FunctionName: 'solarlab-api-getPanelFunction-1J5QDXOK53RUW',
     LogType: 'Tail',
     Payload: JSON.stringify({
-      userID: userID
-    })
+      userID: userID,
+    }),
   };
 
   const panelData = await lambda.invoke(panelLambdaParams, (err, data) => {
@@ -26,11 +26,11 @@ exports.lambdaHandler = async (event) => {
     FunctionName: 'solarlab-api-getInverterFunction-JDZE9IXKHLK9',
     LogType: 'Tail',
     Payload: JSON.stringify({
-      userID: userID
-    })
+      userID: userID,
+    }),
   };
 
-  const inverterData = await lambda.invoke(inverterLambdaParams, (err, data) => {
+  const inverterData = await lambda.invoke(inverterLambdaParams, (err, data)=>{
     if (err) throw err;
     else return data;
   }).promise();
@@ -43,24 +43,26 @@ exports.lambdaHandler = async (event) => {
     return val.panelID === panelID ? val : match;
   }, allPanels[0]);
 
-  const allResult = allInverters.map(inverter => {
+  const allResult = allInverters.map((inverter) => {
     const possiblePlans = Wiring.calculateWiringRestriction(
-      Number(inverter.vdcmax), Number(inverter.vdcmin), Number(inverter.idcmax),
-      Number(inverter.paco), Number(inverter.mpptLow), Number(inverter.mpptHigh),
+      Number(inverter.vdcmax), Number(inverter.vdcmin),
+      Number(inverter.idcmax), Number(inverter.paco),
+      Number(inverter.mpptLow), Number(inverter.mpptHigh),
       Number(inverter.mpptNum), Number(inverter.stringNum),
       Number(inverter.mpptIdcmax), Number(inverter.stringIdcmax),
-      Number(panelInfo.voco), Number(panelInfo.bvoco), Number(panelInfo.bvmpo),
-      Number(panelInfo.vmpo), Number(panelInfo.impo), Number(panelInfo.isco)
+      Number(panelInfo.voco), Number(panelInfo.bvoco),
+      Number(panelInfo.bvmpo), Number(panelInfo.vmpo),
+      Number(panelInfo.impo), Number(panelInfo.isco),
     );
     return {
       ...Wiring.calculateWiring(PVParams, totalPanels, possiblePlans),
-      inverterID: inverter.inverterID
+      inverterID: inverter.inverterID,
     };
   });
-  const validResult = allResult.filter(p =>
+  const validResult = allResult.filter((p) =>
     p.inverterSetUp !== undefined &&
     p.wasted !== undefined &&
-    p.inverterSetUp.length !== 0
+    p.inverterSetUp.length !== 0,
   );
   validResult.sort((first, second) => {
     if (first.wasted > second.wasted) return 1;

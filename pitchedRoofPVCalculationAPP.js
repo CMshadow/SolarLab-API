@@ -17,13 +17,15 @@ exports.lambdaHandler = async (event, context) => {
   const pitchedRoofPolygon = event.pitchedRoofPolygon;
   const obliquity = pitchedRoofPolygon.obliquity;
 
-  const convertedData = data.map(elem => {
-    const allKeepoutFoundLine = elem[1].map(kpt => FoundLine.fromPolyline(kpt));
+  const convertedData = data.map((elem) => {
+    const allKeepoutFoundLine = elem[1].map((kpt) =>
+      FoundLine.fromPolyline(kpt),
+    );
     return [FoundLine.fromPolyline(elem[0]), allKeepoutFoundLine];
   });
 
   const panelLayout = [];
-  convertedData.forEach(partialRoof => {
+  convertedData.forEach((partialRoof) => {
     try {
       const output = PitchedRoofPV.calculatePitchedRoofPanel(
         partialRoof[0],
@@ -40,7 +42,7 @@ exports.lambdaHandler = async (event, context) => {
         rowPerArray,
         panelsPerRow,
         obliquity,
-        pitchedRoofPolygon
+        pitchedRoofPolygon,
       );
       if (output !== null) {
         initArraySequenceNum = output[0];
@@ -57,7 +59,7 @@ exports.lambdaHandler = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      panelLayout: panelLayout
-    })
+      panelLayout: panelLayout,
+    }),
   };
 };

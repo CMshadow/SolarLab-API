@@ -117,7 +117,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
     first.panelPerString * first.stringPerInverter >
     second.panelPerString * second.stringPerInverter,
   );
-
+  console.log(sortedPlan);
   const DPtable = Array(sortedPlan.length).fill(0);
 
   DPtable.forEach((row, i) => {
@@ -125,6 +125,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
   });
 
   DPtable.forEach((row, i) => {
+    console.log(i);
     row.forEach((col, j) => {
       if (i === 0) {
         const numInverter = Math.floor(
@@ -196,25 +197,25 @@ module.exports = {
   calculateWiring,
 };
 
-// const res = calculateWiringRestriction(
-//   600, 200, 20, 3000, 160, 530, 2, 4, 10, 12.5,
-//   57.4, -0.2009, -0.20711, 46.4, 4.31, 4.78
-// );
-// const a = calculateWiring(
-//   {
-//     azimuth: 180,
-//     tilt: 10,
-//     "orientation":"portrait",
-//     "rowSpace":0.5,
-//     "colSpace":0,
-//     "align":"center",
-//     "mode":"individual",
-//     "rowPerArray":2,
-//     "panelPerRow":11,
-//     "panelID":"016b9d51-5b40-41f3-a20e-1dd29fb93450",
-//     "selectPanelIndex":0
-//   },
-//   243,
-//   res
-// )
-// console.log(a);
+const res = calculateWiringRestriction(
+  600, 200, 20, 3000, 160, 530, 2, 4, 10, 12.5,
+  57.4, -0.2009, -0.20711, 46.4, 4.31, 4.78,
+);
+const a = calculateWiring(
+  {
+    'azimuth': 180,
+    'tilt': 10,
+    'orientation': 'portrait',
+    'rowSpace': 0.5,
+    'colSpace': 0,
+    'align': 'center',
+    'mode': 'individual',
+    'rowPerArray': 2,
+    'panelPerRow': 11,
+    'panelID': '016b9d51-5b40-41f3-a20e-1dd29fb93450',
+    'selectPanelIndex': 0,
+  },
+  30,
+  res,
+);
+console.log(a);

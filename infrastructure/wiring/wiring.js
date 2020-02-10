@@ -13,11 +13,8 @@ const calculateWiringRestriction = (
 
   const maxPanelPerString = Math.min(
     Math.floor(VdcMax / Voco / (1 + (t - 25) * Kv)),
-    Math.floor(
-      VMpptHigh / Vmpo / (1 + ((t - 25) * KvPrime)),
-    ),
+    Math.floor(VMpptHigh / Vmpo / (1 + ((t - 25) * KvPrime))),
   );
-
   const minPanelPerString = Math.ceil(
     VMpptLow / Vmpo / (1 + (tPrime - 25) * KvPrime),
   );
@@ -56,8 +53,7 @@ const calculateWiringRestriction = (
           }
           const totalConnectedStringNum =
             mpptSetup[currentMpptIndex].reduce((acc, val) => acc + val, 0);
-          // console.log(totalConnectedStringNum)
-          // console.log(totalConnectedStringNum * Isco)
+
           if (totalConnectedStringNum * Isco <= MpptIdcmax) {
             const minLoadPortIndex = mpptSetup[currentMpptIndex]
               .reduce((minInd, val, i) =>
@@ -65,8 +61,7 @@ const calculateWiringRestriction = (
               , 0);
             if (
               (mpptSetup[currentMpptIndex][minLoadPortIndex] + 1) * Isco <=
-              StringIdcmax &&
-              (totalConnectedStringNum + 1) * Isco <= MpptIdcmax
+              StringIdcmax && (totalConnectedStringNum + 1) * Isco <= MpptIdcmax
             ) {
               mpptSetup[currentMpptIndex][minLoadPortIndex] += 1;
               remainingString -= 1;
@@ -128,8 +123,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
     row.forEach((col, j) => {
       if (i === 0) {
         const numInverter = Math.floor(
-          j /
-          (sortedPlan[i].panelPerString * sortedPlan[i].stringPerInverter),
+          j / (sortedPlan[i].panelPerString * sortedPlan[i].stringPerInverter),
         );
         const plan = [];
         for (let count = 0; count < numInverter; count++) {
@@ -145,8 +139,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
       }
       if (i !== 0) {
         if (
-          j >=
-          (sortedPlan[i].panelPerString * sortedPlan[i].stringPerInverter)
+          j >= (sortedPlan[i].panelPerString * sortedPlan[i].stringPerInverter)
         ) {
           if (
             DPtable[i - 1][j].wasted <
@@ -196,25 +189,40 @@ module.exports = {
   calculateWiring,
 };
 
-// const res = calculateWiringRestriction(
-//   600, 200, 20, 3000, 160, 530, 2, 4, 10, 12.5,
-//   57.4, -0.2009, -0.20711, 46.4, 4.31, 4.78
-// );
-// const a = calculateWiring(
-//   {
-//     azimuth: 180,
-//     tilt: 10,
-//     "orientation":"portrait",
-//     "rowSpace":0.5,
-//     "colSpace":0,
-//     "align":"center",
-//     "mode":"individual",
-//     "rowPerArray":2,
-//     "panelPerRow":11,
-//     "panelID":"016b9d51-5b40-41f3-a20e-1dd29fb93450",
-//     "selectPanelIndex":0
-//   },
-//   243,
-//   res
-// )
-// console.log(a);
+const res = calculateWiringRestriction(
+  600, 260, 70, 21000, 300, 550, 2, 8, 35, 15,
+  57.4, -0.2009, -0.20711, 46.4, 4.31, 4.78,
+);
+console.log(res);
+const mpptRes = [];
+const existMpptSetUp = new Set();
+res.forEach((plan) => {
+  plan.mpptSetup.forEach((mppt) => {
+    if (!existMpptSetUp.has(mppt.toString())) {
+      existMpptSetUp.add(mppt.toString());
+      mpptRes.push({
+        panelPerString: plan.panelPerString,
+        stringPerInverter: mppt.reduce((acc, val) => acc + val, 0),
+      });
+    }
+  });
+});
+console.log(mpptRes);
+const a = calculateWiring(
+  {
+    'azimuth': 180,
+    'tilt': 10,
+    'orientation': 'portrait',
+    'rowSpace': 0.5,
+    'colSpace': 0,
+    'align': 'center',
+    'mode': 'individual',
+    'rowPerArray': 2,
+    'panelPerRow': 11,
+    'panelID': '016b9d51-5b40-41f3-a20e-1dd29fb93450',
+    'selectPanelIndex': 0,
+  },
+  300,
+  res,
+);
+console.log(a);

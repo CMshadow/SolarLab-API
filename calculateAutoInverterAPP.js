@@ -3,10 +3,8 @@ const AWS = require('aws-sdk');
 const lambda = new AWS.Lambda();
 
 exports.lambdaHandler = async (event) => {
-  const panelID = event.panelID;
   const userID = event.userID;
-  const totalPanels = event.totalPanels;
-  const PVParams = event.PVParams;
+  const PVSpec = event.PVSpec;
 
   const panelLambdaParams = {
     FunctionName: 'solarlab-api-getPanelFunction-1J5QDXOK53RUW',
@@ -39,9 +37,9 @@ exports.lambdaHandler = async (event) => {
   }
   const allInverters = JSON.parse(inverterData.Payload);
 
-  const panelInfo = allPanels.reduce((match, val) => {
-    return val.panelID === panelID ? val : match;
-  }, allPanels[0]);
+  const panelInfo = PVSpec.map((aggregate) =>
+    allPanels.find((elem) => elem.panelID === aggregate.panelID),
+  );
 
   const allResult = allInverters.map((inverter) => {
     const possiblePlans = Wiring.calculateWiringRestriction(
@@ -59,6 +57,7 @@ exports.lambdaHandler = async (event) => {
       inverterID: inverter.inverterID,
     };
   });
+
   const validResult = allResult.filter((p) =>
     p.inverterSetUp !== undefined &&
     p.wasted !== undefined &&

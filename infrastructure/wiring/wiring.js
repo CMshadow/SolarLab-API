@@ -86,6 +86,9 @@ const calculateWiringRestriction = (
               , 0)
             , 0),
             mpptSetup: mpptSetup,
+            mpptSpec: mpptSetup.map(ary =>
+              ary.reduce((acc,val) => acc + val, 0)
+            )
           });
         }
       });
@@ -193,17 +196,18 @@ const res = calculateWiringRestriction(
   600, 260, 70, 21000, 300, 550, 2, 8, 35, 15,
   57.4, -0.2009, -0.20711, 46.4, 4.31, 4.78,
 );
-console.log(res);
+for (r of res) console.log(r)
 const mpptRes = [];
 const existMpptSetUp = new Set();
 res.forEach((plan) => {
   plan.mpptSetup.forEach((mppt) => {
-    if (!existMpptSetUp.has(mppt.toString())) {
-      existMpptSetUp.add(mppt.toString());
-      mpptRes.push({
-        panelPerString: plan.panelPerString,
-        stringPerInverter: mppt.reduce((acc, val) => acc + val, 0),
-      });
+    const obj = {
+      panelPerString: plan.panelPerString,
+      stringPerInverter: mppt.reduce((acc, val) => acc + val, 0),
+    }
+    if (!existMpptSetUp.has(JSON.stringify(obj))) {
+      mpptRes.push(obj);
+      existMpptSetUp.add(JSON.stringify(obj))
     }
   });
 });
@@ -222,7 +226,25 @@ const a = calculateWiring(
     'panelID': '016b9d51-5b40-41f3-a20e-1dd29fb93450',
     'selectPanelIndex': 0,
   },
-  300,
-  res,
+  200,
+  mpptRes,
+);
+const b = calculateWiring(
+  {
+    'azimuth': 130,
+    'tilt': 0,
+    'orientation': 'portrait',
+    'rowSpace': 0.5,
+    'colSpace': 0,
+    'align': 'center',
+    'mode': 'individual',
+    'rowPerArray': 2,
+    'panelPerRow': 11,
+    'panelID': '016b9d51-5b40-41f3-a20e-1dd29fb93450',
+    'selectPanelIndex': 0,
+  },
+  100,
+  mpptRes,
 );
 console.log(a);
+console.log(b)

@@ -1,3 +1,5 @@
+const Combinatorics = require('js-combinatorics');
+
 const calculateWiringRestriction = (
   VdcMax, VdcMin, IdcMax, Paco, VMpptLow, VMpptHigh, MpptNum, StringNum,
   MpptIdcmax, StringIdcmax,
@@ -86,9 +88,9 @@ const calculateWiringRestriction = (
               , 0)
             , 0),
             mpptSetup: mpptSetup,
-            mpptSpec: mpptSetup.map(ary =>
-              ary.reduce((acc,val) => acc + val, 0)
-            )
+            mpptSpec: mpptSetup.map((ary) =>
+              ary.reduce((acc, val) => acc + val, 0),
+            ),
           });
         }
       });
@@ -122,6 +124,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
     DPtable[i] = Array(totalPanels + 1).fill().map((x, i) => i);
   });
 
+  historyPlan = new Set();
   DPtable.forEach((row, i) => {
     row.forEach((col, j) => {
       if (i === 0) {
@@ -132,6 +135,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
         for (let count = 0; count < numInverter; count++) {
           plan.push(sortedPlan[i]);
         }
+        historyPlan.add(JSON.stringify(plan));
         DPtable[i][j] = {
           plan: plan,
           wasted: j - (
@@ -150,6 +154,7 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
               sortedPlan[i].panelPerString * sortedPlan[i].stringPerInverter
             )].wasted
           ) {
+            historyPlan.add(JSON.stringify([...DPtable[i - 1][j].plan]));
             DPtable[i][j] = {
               plan: [...DPtable[i - 1][j].plan],
               wasted: DPtable[i - 1][j].wasted,
@@ -165,12 +170,14 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
             newPlan.forEach((plan) => {
               newWasted -= (plan.panelPerString * plan.stringPerInverter);
             });
+            historyPlan.add(JSON.stringify(newPlan));
             DPtable[i][j] = {
               plan: newPlan,
               wasted: newWasted,
             };
           }
         } else {
+          historyPlan.add(JSON.stringify([...DPtable[i - 1][j].plan]));
           DPtable[i][j] = {
             plan: [...DPtable[i - 1][j].plan],
             wasted: DPtable[i - 1][j].wasted,
@@ -180,11 +187,9 @@ const calculateWiring = (PVparams, totalPanels, wiringRestriction) => {
     });
   });
 
-  const solution = DPtable[sortedPlan.length - 1][totalPanels];
-  return {
-    inverterSetUp: solution.plan,
-    wasted: solution.wasted,
-  };
+  const allPlans = [...historyPlan].map((elem) => JSON.parse(elem))
+    .filter((elem) => elem !== '[]');
+  return allPlans;
 };
 
 module.exports = {
@@ -192,26 +197,43 @@ module.exports = {
   calculateWiring,
 };
 
+const totalPanels = 300;
 const res = calculateWiringRestriction(
   600, 260, 70, 21000, 300, 550, 2, 8, 35, 15,
   57.4, -0.2009, -0.20711, 46.4, 4.31, 4.78,
 );
-for (r of res) console.log(r)
-const mpptRes = [];
-const existMpptSetUp = new Set();
+const mpptRes = {};
 res.forEach((plan) => {
-  plan.mpptSetup.forEach((mppt) => {
+  plan.mpptSpec.forEach((spec) => {
     const obj = {
       panelPerString: plan.panelPerString,
-      stringPerInverter: mppt.reduce((acc, val) => acc + val, 0),
-    }
-    if (!existMpptSetUp.has(JSON.stringify(obj))) {
-      mpptRes.push(obj);
-      existMpptSetUp.add(JSON.stringify(obj))
+      stringPerInverter: spec,
+    };
+    if (JSON.stringify(obj) in mpptRes) {
+      mpptRes[JSON.stringify(obj)] += 1;
+    } else {
+      mpptRes[JSON.stringify(obj)] = 1;
     }
   });
 });
-console.log(mpptRes);
+
+const overallInverterPlan = calculateWiring(
+  {
+    'azimuth': 180,
+    'tilt': 10,
+    'orientation': 'portrait',
+    'rowSpace': 0.5,
+    'colSpace': 0,
+    'align': 'center',
+    'mode': 'individual',
+    'rowPerArray': 2,
+    'panelPerRow': 11,
+    'panelID': '016b9d51-5b40-41f3-a20e-1dd29fb93450',
+    'selectPanelIndex': 0,
+  },
+  totalPanels,
+  res,
+);
 const a = calculateWiring(
   {
     'azimuth': 180,
@@ -227,7 +249,7 @@ const a = calculateWiring(
     'selectPanelIndex': 0,
   },
   200,
-  mpptRes,
+  Object.keys(mpptRes).map((obj) => JSON.parse(obj)),
 );
 const b = calculateWiring(
   {
@@ -244,7 +266,42 @@ const b = calculateWiring(
     'selectPanelIndex': 0,
   },
   100,
-  mpptRes,
+  Object.keys(mpptRes).map((obj) => JSON.parse(obj)),
 );
-console.log(a);
-console.log(b)
+
+const overallInverterDict = overallInverterPlan.map((plan) => {
+  const mpptDict = {};
+  plan.map((inverter) => {
+    inverter.mpptSpec.forEach((spec) => {
+      const obj = {
+        panelPerString: inverter.panelPerString,
+        stringPerInverter: spec,
+      };
+      if (JSON.stringify(obj) in mpptDict) {
+        mpptDict[JSON.stringify(obj)] += 1;
+      } else {
+        mpptDict[JSON.stringify(obj)] = 1;
+      }
+    });
+  });
+  return JSON.stringify(mpptDict);
+});
+
+const cp = Combinatorics.cartesianProduct(a, b).toArray();
+const test = cp.map((combo) => {
+  const dic = {};
+  combo.forEach((roof) => {
+    roof.forEach((mppt) => {
+      if (JSON.stringify(mppt) in dic) {
+        dic[JSON.stringify(mppt)] += 1;
+      } else {
+        dic[JSON.stringify(mppt)] = 1;
+      }
+    });
+  });
+  return dic;
+}).filter((dic) => overallInverterDict.includes(JSON.stringify(dic)));
+// console.log(overallInverterDict);
+console.log(test);
+// console.log(cp[100]);
+// console.log(test[100]);

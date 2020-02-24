@@ -1,4 +1,5 @@
 const Wiring = require('./infrastructure/wiring/wiring');
+const Combinatorics = require('js-combinatorics');
 const AWS = require('aws-sdk');
 const lambda = new AWS.Lambda();
 
@@ -40,6 +41,9 @@ exports.lambdaHandler = async (event) => {
   const panelInfo = PVSpec.map((aggregate) =>
     allPanels.find((elem) => elem.panelID === aggregate.panelID),
   );
+  const totalPanels = PVSpec.reduce((acc, elem) => {
+    acc + elem.panelCount;
+  }, 0);
 
   const allResult = allInverters.map((inverter) => {
     const possiblePlans = Wiring.calculateWiringRestriction(
@@ -52,6 +56,29 @@ exports.lambdaHandler = async (event) => {
       Number(panelInfo.bvmpo), Number(panelInfo.vmpo),
       Number(panelInfo.impo), Number(panelInfo.isco),
     );
+
+    const mpptRes = [];
+    const existMpptSetUp = new Set();
+    possiblePlans.forEach((plan) => {
+      plan.mpptSpec.forEach((spec) => {
+        const obj = {
+          panelPerString: plan.panelPerString,
+          stringPerInverter: spec,
+        };
+        if (!existMpptSetUp.has(JSON.stringify(obj))) {
+          mpptRes.push(obj);
+          existMpptSetUp.add(JSON.stringify(obj));
+        }
+      });
+    });
+
+    const allSubPlans = PVSpec.map((roofSpec) =>
+      Wiring.calculateWiring(roofSpec, roofSpec.panelCount, mpptRes)
+        .filter((x) => x.length != 0),
+    );
+
+    const cp = Combinatorics.cartesianProduct(...allSubPlans);
+
     return {
       ...Wiring.calculateWiring(PVParams, totalPanels, possiblePlans),
       inverterID: inverter.inverterID,

@@ -20,6 +20,7 @@
     "@turf/turf": "^5.1.6",
     "aws-sdk": "^2.559.0",
     "cesium": "^1.62.0",
+    "js-combinatorics": "^0.5.5",
     "simplepolygon": "^1.2.3",
     "uuid": "^3.3.3"
   },

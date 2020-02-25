@@ -20,24 +20,26 @@ exports.lambdaHandler = async (event, context, callback) => {
     params.ProjectionExpression = event.attributes.join(', ');
   }
 
-  let response = null;
-  await dynamodb.query(params, (err, data) => {
-    if (err) {
-      console.log(err);
-      throw new Error('Error: Database error');
-    } else {
-      if (data.Items.length === 0) {
-        throw new Error('Error: User does not have any record');
+  const promise = new Promise((resolve, reject) => {
+    dynamodb.query(params, (err, data) => {
+      if (err) {
+        console.log(err);
+        reject(new Error('Error: Database error'));
       } else {
-        response = data.Items.map((panel) => {
-          Object.keys(panel).forEach((k) => {
-            panel[k] = Object.values(panel[k])[0];
+        if (data.Items.length === 0) {
+          reject(new Error('Error: User does not have any record'));
+        } else {
+          response = data.Items.map((panel) => {
+            Object.keys(panel).forEach((k) => {
+              panel[k] = Object.values(panel[k])[0];
+            });
+            return panel;
           });
-          return panel;
-        });
+          resolve(response);
+        }
       }
-    }
-  }).promise();
+    });
+  });
 
-  return response;
+  return promise;
 };

@@ -1,7 +1,6 @@
 {
-  "PVParams": "{\"mode\": \"single\"}",
   "userID": "0000-0000-0000-0000",
-  "panelID": "c5927277-85b7-4869-b5e6-80005f7cbf34",
-  "inverterID": "407e6c46-cd30-473e-b971-2e7399208a5e",
-  "totalPanels": 5
+  "panelID": "016b9d51-5b40-41f3-a20e-1dd29fb93450",
+  "inverterID": "5ba0dd86-287e-11ea-8f48-784f436fc6d5",
+  "PVSpec": "[{\"panelCount\":30,\"azimuth\":180,\"tilt\":10,\"panelID\":\"016b9d51-5b40-41f3-a20e-1dd29fb93450\",\"mode\":\"individual\",\"rowPerArray\":2,\"panelPerRow\":11,\"roofIndex\":[\"0\"]},{\"panelCount\":36,\"azimuth\":180,\"tilt\":10,\"panelID\":\"016b9d51-5b40-41f3-a20e-1dd29fb93450\",\"mode\":\"individual\",\"rowPerArray\":2,\"panelPerRow\":11,\"roofIndex\":[\"0\"]},{\"panelCount\":60,\"azimuth\":180,\"tilt\":10,\"panelID\":\"016b9d51-5b40-41f3-a20e-1dd29fb93450\",\"mode\":\"individual\",\"rowPerArray\":2,\"panelPerRow\":11,\"roofIndex\":[\"0\"]}]"
 }

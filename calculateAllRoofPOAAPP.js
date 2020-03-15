@@ -7,8 +7,8 @@ exports.lambdaHandler = async (event) => {
     LogType: 'Tail',
     Payload: JSON.stringify({
       longitude: event.longitude,
-      latitude: event.latitude
-    })
+      latitude: event.latitude,
+    }),
   };
 
   const closestWeatherFile = await lambda.invoke(lambdaParams, (err, data) => {
@@ -25,14 +25,14 @@ exports.lambdaHandler = async (event) => {
     latitude: event.latitude,
     tilts: tilts,
     azimuths: azimuths,
-    weatherFilename: tmy3Filename
+    weatherFilename: tmy3Filename,
   };
 
   const params = {
     FunctionName:
       'solarlab-api-python-CalculateAllRoofPOAFunction-VF25YGOIQOBX',
     LogType: 'Tail',
-    Payload: JSON.stringify(requestData)
+    Payload: JSON.stringify(requestData),
   };
 
   const promise = await lambda.invoke(params, (err, data) => {

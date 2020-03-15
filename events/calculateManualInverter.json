@@ -1,6 +1,15 @@
 {
   "userID": "0000-0000-0000-0000",
   "panelID": "016b9d51-5b40-41f3-a20e-1dd29fb93450",
-  "inverterID": "5ba0dd86-287e-11ea-8f48-784f436fc6d5",
-  "PVSpec": "[{\"panelCount\":30,\"azimuth\":180,\"tilt\":10,\"panelID\":\"016b9d51-5b40-41f3-a20e-1dd29fb93450\",\"mode\":\"individual\",\"rowPerArray\":2,\"panelPerRow\":11,\"roofIndex\":[\"0\"]},{\"panelCount\":36,\"azimuth\":180,\"tilt\":10,\"panelID\":\"016b9d51-5b40-41f3-a20e-1dd29fb93450\",\"mode\":\"individual\",\"rowPerArray\":2,\"panelPerRow\":11,\"roofIndex\":[\"0\"]},{\"panelCount\":60,\"azimuth\":180,\"tilt\":10,\"panelID\":\"016b9d51-5b40-41f3-a20e-1dd29fb93450\",\"mode\":\"individual\",\"rowPerArray\":2,\"panelPerRow\":11,\"roofIndex\":[\"0\"]}]"
+  "inverterID": "5ba10494-287e-11ea-b4d4-784f436fc6d5",
+  "PVSpec": [{
+    "panelCount":112,
+    "azimuth":180,
+    "tilt":10,
+    "panelID":"016b9d51-5b40-41f3-a20e-1dd29fb93450",
+    "mode":"individual",
+    "rowPerArray":2,
+    "panelPerRow":11,
+    "roofIndex":["0"]
+  }]
 }

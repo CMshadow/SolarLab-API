@@ -7,20 +7,43 @@ const Polyline = require('./polyline.js');
 const MathLineCollection = require('../math/mathLineCollection.js');
 const MathLine = require('../math/mathLine.js');
 
+/**
+ * A closed polyline
+ * @extends Polyline
+ */
 class FoundLine extends Polyline {
-  constructor (
+  /**
+   * constructor
+   * @param {[type]}  [points=null] [description]
+   * @param {[type]}  [id=null]     [description]
+   * @param {[type]}  [name=null]   [description]
+   * @param {[type]}  [color=null]  [description]
+   * @param {[type]}  [width=null]  [description]
+   * @param {Boolean} [show=true]   [description]
+   */
+  constructor(
     points = null, id = null, name = null, color = null, width = null,
-    show = true
+    show = true,
   ) {
     super(points, id, name, color, width, show);
   }
 
-  static fromPolyline (
+  /**
+   * copy constructor
+   * @param  {[type]}  polyline               [description]
+   * @param  {[type]}  [id=polyline.entityId] [description]
+   * @param  {[type]}  [name=null]            [description]
+   * @param  {[type]}  [color=null]           [description]
+   * @param  {[type]}  [width=null]           [description]
+   * @param  {Boolean} [show=true]            [description]
+   * @return {[type]}                         [description]
+   */
+  static fromPolyline(
     polyline, id = polyline.entityId, name = null, color = null, width = null,
-    show = true
+    show = true,
   ) {
     const priorPoints = polyline.points.slice(0, polyline.points.length - 1)
-      .map(elem => {
+      .map((elem) => {
         return Point.fromPoint(elem);
       });
     const newPoints = [...priorPoints, priorPoints[0]];
@@ -31,36 +54,36 @@ class FoundLine extends Polyline {
     return new FoundLine(newPoints, id, newName, newColor, newWidth, newShow);
   }
 
-  makeSetbackPolylineOutside (stbDist) {
+  makeSetbackPolylineOutside(stbDist) {
     const originPolyline = this.makeSetbackPolyline(stbDist, 'outside');
     if (originPolyline.polyline.isSelfIntersection()) {
       return originPolyline.polyline.removeOutsideSetbackSelfIntersection(
-        originPolyline.direction
+        originPolyline.direction,
       );
     } else {
       return [originPolyline.polyline];
     }
   }
 
-  makeSetbackPolylineInside (stbDist) {
+  makeSetbackPolylineInside(stbDist) {
     const originPolyline = this.makeSetbackPolyline(stbDist, 'inside');
     if (
       turf.lineIntersect(
-        this.makeGeoJSON(), originPolyline.polyline.makeGeoJSON()
+        this.makeGeoJSON(), originPolyline.polyline.makeGeoJSON(),
       ).features.length !== 0
     ) {
       return [null];
     }
     if (originPolyline.polyline.isSelfIntersection()) {
       return originPolyline.polyline.splitInsideSetbackSelfIntersection(
-        originPolyline.direction
+        originPolyline.direction,
       );
     } else {
       return [originPolyline.polyline];
     }
   }
 
-  makeSetbackPolyline (stbDist, type) {
+  makeSetbackPolyline(stbDist, type) {
     const originPolyline = FoundLine.fromPolyline(this);
     const mathLineCollection = MathLineCollection.fromPolyline(originPolyline);
     const result = [];
@@ -69,7 +92,7 @@ class FoundLine extends Polyline {
       mathLineCollection.mathLineCollection.forEach((mathLine, index) => {
         const anchor = Coordinate.destination(
           mathLine.originCor, mathLine.brng + direction,
-          stbDist instanceof Array ? stbDist[index] : stbDist
+          stbDist instanceof Array ? stbDist[index] : stbDist,
         );
         stbMathLineCollection.addMathLine(new MathLine(anchor, mathLine.brng));
       });
@@ -84,53 +107,53 @@ class FoundLine extends Polyline {
           mathLine.originCor,
           mathLine.brng,
           nextMathLine.originCor,
-          nextMathLine.brng - 180
+          nextMathLine.brng - 180,
         );
         const intersectCandidate2 = Coordinate.intersection(
           mathLine.originCor,
           mathLine.brng,
           nextMathLine.originCor,
-          nextMathLine.brng
+          nextMathLine.brng,
         );
         const intersectCandidate3 = Coordinate.intersection(
           mathLine.originCor,
           mathLine.brng - 180,
           nextMathLine.originCor,
-          nextMathLine.brng - 180
+          nextMathLine.brng - 180,
         );
         const intersectCandidate4 = Coordinate.intersection(
           mathLine.originCor,
           mathLine.brng - 180,
           nextMathLine.originCor,
-          nextMathLine.brng
+          nextMathLine.brng,
         );
         const intersectCandidateCompare = [
           {
             candidate: intersectCandidate1,
             dist:
-              Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate1)
+              Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate1),
           },
           {
             candidate: intersectCandidate2,
             dist:
-              Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate2)
+              Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate2),
           },
           {
             candidate: intersectCandidate3,
             dist:
-              Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate3)
+              Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate3),
           },
           {
             candidate: intersectCandidate4,
             dist:
-              Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate4)
-          }
+              Coordinate.surfaceDistance(mathLine.originCor, intersectCandidate4),
+          },
         ];
         intersectCandidateCompare.sort((a, b) => (a.dist < b.dist) ? -1 : 1);
         const intersection = intersectCandidateCompare[0].candidate;
 
         mathLine.dist = Coordinate.surfaceDistance(
-          mathLine.originCor, intersection
+          mathLine.originCor, intersection,
         );
         nextMathLine.originCor = intersection;
       });
@@ -139,7 +162,7 @@ class FoundLine extends Polyline {
       result.push({
         polyline: stbPolyline,
         direction: direction,
-        polylineArea: stbPolyline.polylineArea()
+        polylineArea: stbPolyline.polylineArea(),
       });
     }
     if (type === 'inside') {
@@ -153,13 +176,13 @@ class FoundLine extends Polyline {
     }
   }
 
-  removeOutsideSetbackSelfIntersection (direction) {
+  removeOutsideSetbackSelfIntersection(direction) {
     const splitGeoJSON = simplepolygon(this.makeGeoJSON());
     const splitPolylines = [];
-    splitGeoJSON.features.forEach(elem => {
+    splitGeoJSON.features.forEach((elem) => {
       if (elem.properties.parent < 0) {
-        const points = elem.geometry.coordinates[0].slice(0, -1).map(cor =>
-          new Point(cor[0], cor[1], cor[2] ? cor[2] : this.points[0].height)
+        const points = elem.geometry.coordinates[0].slice(0, -1).map((cor) =>
+          new Point(cor[0], cor[1], cor[2] ? cor[2] : this.points[0].height),
         );
         splitPolylines.push(new FoundLine([...points, points[0]]));
       }
@@ -167,17 +190,17 @@ class FoundLine extends Polyline {
     return splitPolylines;
   }
 
-  splitInsideSetbackSelfIntersection (direction) {
+  splitInsideSetbackSelfIntersection(direction) {
     const splitGeoJSON = simplepolygon(this.makeGeoJSON());
     const splitPolylines = [];
     const windingDirection = splitGeoJSON.features[0].properties.winding;
-    splitGeoJSON.features.forEach(elem => {
+    splitGeoJSON.features.forEach((elem) => {
       if (
         elem.properties.winding === windingDirection &&
         elem.properties.parent < 1
       ) {
-        const points = elem.geometry.coordinates[0].slice(0, -1).map(cor =>
-          new Point(cor[0], cor[1], cor[2] ? cor[2] : this.points[0].height)
+        const points = elem.geometry.coordinates[0].slice(0, -1).map((cor) =>
+          new Point(cor[0], cor[1], cor[2] ? cor[2] : this.points[0].height),
         );
         splitPolylines.push(new FoundLine([...points, points[0]]));
       }

@@ -4,112 +4,128 @@ Resources:
   SetbackPolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: setbackPolylineCalculationAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 15
+      MemorySize: 1024
   SetbackPolylinePitchedRoofFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: setbackPolylinePitchedRoofCalculationAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 15
+      MemorySize: 1024
   PassagePolylineFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: passageSetbackCalculationAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 15
+      MemorySize: 1024
   FlatRoofPVCalculationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: flatRoofPVCalculationAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 30
+      MemorySize: 2048
   PitchedRoofPVCalculationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: pitchedRoofPVCalculationAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 30
+      MemorySize: 2048
   createPanelFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: createPanelAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 15
+      MemorySize: 512
   getPanelFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: getPanelAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 15
+      MemorySize: 512
   createInverterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: createInverterAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 15
+      MemorySize: 512
   getInverterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: getInverterAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 15
+      MemorySize: 512
   findClosestUSWeatherFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: findClosesUSWeatherAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 30
+      MemorySize: 512
   fetchUSGlobalOptimalFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: fetchUSGlobalOptimalAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 30
+      MemorySize: 512
   calculateOptimalTiltFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: calculateOptimalTiltAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 60
+      MemorySize: 1024
   calculateOptimalTiltAzimuthFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: calculateOptimalTiltAzimuthAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 60
+      MemorySize: 1024
   calculateAutoInverterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: calculateAutoInverterAPP.lambdaHandler
-      Runtime: nodejs10.x
-      Timeout: 15
+      Runtime: nodejs12.x
+      Timeout: 30
+      MemorySize: 1024
   calculateManualInverterFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: calculateManualInverterAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 15
+      MemorySize: 2048
   calculateAllRoofPOAFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://solarlab-sam-lambda/5b7049681d50de0175707bd1f0be8542
+      CodeUri: s3://solarlab-sam-lambda/170174251ae615023de7db63fbdbaf0b
       Handler: calculateAllRoofPOAAPP.lambdaHandler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 30
+      MemorySize: 1024

@@ -1,13 +1,5 @@
 {
-  "userID": "0000-0000-0000-0000",
-  "PVSpec": "[{
-    \"panelCount\": 243,
-    \"azimuth\": 180,
-    \"tilt\": 10,
-    \"roofIndex\": [0],
-    \"mode\": \"individual\",
-    \"rowPerArray\": 2,
-    \"panelPerRow\": 11,
-    \"panelID\": \"c5927277-85b7-4869-b5e6-80005f7cbf34\",
-  }]"
+  "PVSpec": [{"panelCount":112,"azimuth":180,"tilt":10,"panelID":"016b9d51-5b40-41f3-a20e-1dd29fb93450","mode":"individual","rowPerArray":2,"panelPerRow":11,"roofIndex":["0"]}],
+  "panelID": "016b9d51-5b40-41f3-a20e-1dd29fb93450",
+  "userID": "0000-0000-0000-0000"
 }

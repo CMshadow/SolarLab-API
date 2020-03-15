@@ -7,8 +7,8 @@ exports.lambdaHandler = async (event) => {
     LogType: 'Tail',
     Payload: JSON.stringify({
       longitude: event.longitude,
-      latitude: event.latitude
-    })
+      latitude: event.latitude,
+    }),
   };
 
   const closestWeatherFile = await lambda.invoke(lambdaParams, (err, data) => {
@@ -29,17 +29,17 @@ exports.lambdaHandler = async (event) => {
       latitude: event.latitude,
       tilts: tilts.slice(i, i + 5),
       azimuths: [event.azimuth],
-      weatherFilename: tmy3Filename
+      weatherFilename: tmy3Filename,
     });
   }
   const allPromise = [];
 
-  requestData.forEach(data => {
+  requestData.forEach((data) => {
     const params = {
       FunctionName:
         'solarlab-api-python-CalculateSubsetOptimalFunction-KNU5H0T9TG1D',
       LogType: 'Tail',
-      Payload: JSON.stringify(data)
+      Payload: JSON.stringify(data),
     };
 
     const invokePromise = lambda.invoke(params, (err, data) => {
@@ -50,8 +50,8 @@ exports.lambdaHandler = async (event) => {
     allPromise.push(invokePromise);
   });
 
-  const globalOptimal = await Promise.all(allPromise).then(values => {
-    const subsetOptimal = values.map(v => {
+  const globalOptimal = await Promise.all(allPromise).then((values) => {
+    const subsetOptimal = values.map((v) => {
       return JSON.parse(v.Payload);
     });
     const maxSetup = subsetOptimal.reduce((max, v) => {
@@ -59,7 +59,7 @@ exports.lambdaHandler = async (event) => {
     }, subsetOptimal[0]);
     return {
       optimalTilt: maxSetup.tilt,
-      optimalAzimuth: maxSetup.azimuth
+      optimalAzimuth: maxSetup.azimuth,
     };
   });
 

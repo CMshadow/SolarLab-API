@@ -4,10 +4,12 @@ const Combinatorics = require('js-combinatorics');
 const lambda = new AWS.Lambda();
 
 exports.lambdaHandler = async (event) => {
+  console.log(event.PVSpec);
+  console.log(typeof(event.PVSpec));
   const panelID = event.panelID;
   const inverterID = event.inverterID;
   const userID = event.userID;
-  const PVSpec = JSON.parse(event.PVSpec);
+  const PVSpec = event.PVSpec;
   const totalPanels = PVSpec.reduce((acc, elem) => acc + elem.panelCount, 0);
 
   const panelLambdaParams = {
@@ -70,9 +72,12 @@ exports.lambdaHandler = async (event) => {
       }
     });
   });
-  console.log(mpptRes);
+
   const overallInverterPlan =
     Wiring.calculateWiring(PVSpec[0], totalPanels, res);
+  if (!overallInverterPlan) {
+    throw new Error('Error: The Inverter does not fit');
+  }
   const overallInverterDict = overallInverterPlan.map((plan) => {
     const mpptDict = {};
     plan.map((inverter) => {
@@ -97,6 +102,9 @@ exports.lambdaHandler = async (event) => {
       Object.keys(mpptRes).map((obj) => JSON.parse(obj)),
     ).filter((x) => x.length != 0),
   );
+  if (allSubPlans.every((plan) => plan.length == 0)) {
+    throw new Error('Error: The Inverter does not fit');
+  }
 
   const cp = Combinatorics.cartesianProduct(...allSubPlans).toArray();
   const practicalPlan = cp.map((combo) => {
@@ -151,14 +159,18 @@ exports.lambdaHandler = async (event) => {
       acc += val.panelPerString * val.stringPerInverter, 0,
     ),
   )[0];
+  const connectedCount = result.reduce((acc, val) =>
+    acc + val.panelPerString * val.stringPerInverter, 0,
+  );
 
 
   if (result.length == 0) {
     throw new Error('Error: The Inverter does not fit');
   } else {
-    return JSON.stringify({
+    return {
       inverterSetUp: result,
       inverterID: inverterInfo.inverterID,
-    });
+      connectedCount: connectedCount,
+    };
   }
 };

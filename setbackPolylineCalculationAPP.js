@@ -2,8 +2,8 @@ const FoundLine = require('./infrastructure/line/foundLine');
 
 exports.lambdaHandler = async (event, context) => {
   console.log(event);
-  const originPolylines = event.originPolylines.map(elem =>
-    (FoundLine.fromPolyline(elem))
+  const originPolylines = event.originPolylines.map((elem) =>
+    (FoundLine.fromPolyline(elem)),
   );
   const stbDists = event.stbDists;
   const direction = event.direction;
@@ -15,11 +15,11 @@ exports.lambdaHandler = async (event, context) => {
     } else {
       if (direction === 'inside') {
         stbPolylines.push(
-          originPolyline.makeSetbackPolylineInside(stbDists[index])
+          originPolyline.makeSetbackPolylineInside(stbDists[index]),
         );
       } else {
         stbPolylines.push(
-          originPolyline.makeSetbackPolylineOutside(stbDists[index])
+          originPolyline.makeSetbackPolylineOutside(stbDists[index]),
         );
       }
     }
@@ -31,8 +31,8 @@ exports.lambdaHandler = async (event, context) => {
     response = {
       statusCode: 200,
       body: JSON.stringify({
-        stbPolylines: stbPolylines
-      })
+        stbPolylines: stbPolylines,
+      }),
     };
   } catch (err) {
     console.log(err);
